@@ -14,6 +14,17 @@ class WritingViewController: BaseViewController{
     
     private lazy var viewModel: WritingViewModel = WritingViewModel(view: writingView)
     
+    var selectedOptions: [String: Any] = [:]
+    
+    init(options: [String: Any]){
+        selectedOptions = options
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

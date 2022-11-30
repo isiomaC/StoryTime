@@ -48,43 +48,63 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
     
     var headerCellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell, HeaderItem>!
     
+    var selectedOption: [HeaderItem] = []
+    
     init(collectionView: UICollectionView) {
         super.init(collectionView: collectionView, cellReuseIdentifier: "HomeCell")
     }
     
-    override func update(){
-        // MARK: Setup snapshots
-        var dataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, ListItem>()
-
-        // Create a section in the data source snapshot
-        dataSourceSnapshot.appendSections([.main])
-        dataSource?.apply(dataSourceSnapshot)
+    private func getSectionSnapShot() -> NSDiffableDataSourceSectionSnapshot<ListItem>{
         
         // Create a section snapshot for main section
         var sectionSnapshot = NSDiffableDataSourceSectionSnapshot<ListItem>()
-        
+
         if let mData = data.value{
             for headerItem in mData {
-               
-                
+
                 // Create a header ListItem & append as parent
                 let headerListItem = ListItem.header(headerItem)
                 sectionSnapshot.append([headerListItem])
-                
-                
+
                 // Create an array of symbol ListItem & append as children of headerListItem
                 let symbolListItemArray = headerItem.symbols.map { ListItem.symbol($0) }
                 sectionSnapshot.append(symbolListItemArray, to: headerListItem)
-                
-                
+
                 // Expand this section by default
                 sectionSnapshot.expand([headerListItem])
-
             }
         }
-       
-        // Apply section snapshot to main section
-        dataSource?.apply(sectionSnapshot, to: .main, animatingDifferences: false)
+        return sectionSnapshot
+    }
+    
+    
+    override func update(){
+
+        if var snapShot = dataSource?.snapshot(){
+            let itemsExist = snapShot.numberOfItems > 0
+            
+            if itemsExist {
+                let itemIdentifiers = snapShot.itemIdentifiers(inSection: .main)
+                
+                snapShot.deleteItems(itemIdentifiers)
+                
+                let sectionSnapshot = getSectionSnapShot()
+                
+                dataSource?.apply(sectionSnapshot, to: .main, animatingDifferences: true)
+            }else{
+                
+                var dataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, ListItem>()
+        
+                // Create a section in the data source snapshot
+                dataSourceSnapshot.appendSections([.main])
+                dataSource?.applySnapshotUsingReloadData(dataSourceSnapshot)
+        
+                let sectionSnapshot = getSectionSnapShot()
+        
+                // Apply section snapshot to main section
+                dataSource?.apply(sectionSnapshot, to: .main, animatingDifferences: true)
+            }
+        }
     }
     
     
@@ -118,8 +138,6 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
                 return cell
             }
         }
-        
-        update()
     }
     
     private func setUpParentCell(){
@@ -197,9 +215,41 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
 
 
 extension HomeViewModel: UICollectionViewDelegate {
+    
+    private func setSelected(_ item: HeaderItem){
+  
+        let existing = selectedOption.first { header in
+            header.title == item.title
+        }
+        
+        if let exist = existing, let index = selectedOption.firstIndex(of: exist){
+            
+            let _ = selectedOption.remove(at: index)
+            
+            selectedOption.append(item)
+        }else{
+            selectedOption.append(item)
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        print(indexPath.row)
+        var selected = data.value?.first(where: { headerItem in
+           
+            if headerItem.symbols.contains(where: { child in
+                child.id == indexPath.row
+            }){
+                return true
+            }
+            return false
+        })
+        
+        selected?.symbols.removeAll(where: { child in
+            child.id != indexPath.row
+        })
+        
+        setSelected(selected!)
+        
     }
     
 }

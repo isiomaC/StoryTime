@@ -30,7 +30,7 @@ struct HeaderItem: Hashable {
     let imageName: String
     let title: String
     let subTitle: String
-    let symbols: [ChildItem]
+    var symbols: [ChildItem]
     let image: UIImage
     
     init(imageName: String, title: String, subTitle: String, symbols: [ChildItem]){

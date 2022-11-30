@@ -20,7 +20,7 @@ class CollectionViewModel<CellType: UICollectionViewCell & Providable>: NSObject
     typealias Item = CellType.ProvidedItem
     typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
     
-    private weak var collectionView: UICollectionView?
+    weak var collectionView: UICollectionView?
     
     public var items: ObservableObject<[Item]> = ObservableObject([])
     

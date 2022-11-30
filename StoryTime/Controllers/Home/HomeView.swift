@@ -23,6 +23,8 @@ class HomeView: BaseView{
     
     override func setUpViews() {
         
+        inputField.textAlignment = .center
+        
         addSubview(heading)
         addSubview(container)
         addSubview(inputField)
@@ -34,20 +36,10 @@ class HomeView: BaseView{
 
     }
     
-    private func addBottomBorderInputField(){
-        inputField.textAlignment = .center
-        
-        let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0.0, y: inputField.frame.height - 1, width: inputField.frame.width, height: 1.0)
-        bottomLine.backgroundColor = UIColor.label.cgColor
-        inputField.borderStyle = UITextField.BorderStyle.none
-        inputField.layer.addSublayer(bottomLine)
-    }
-    
     override func layoutSubviews(){
         super.layoutSubviews()
         MyColors.setGradientBackground(view: nextBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
-        addBottomBorderInputField()
+        inputField.addBottomBorder()
     }
     
     private func triggerConstraints(){

@@ -10,15 +10,14 @@ import Foundation
 import UIKit
 
 class ViewGenerator {
-    
-    static func getSimpleImageButton(image: UIImage, tintColor: UIColor = MyColors.primary) -> UIButton{
+    static func getSimpleImageButton(image: UIImage, bgColor: UIColor = .clear, tintColor: UIColor = MyColors.primary) -> UIButton{
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.cornerRadius = 10
         btn.clipsToBounds = true
         btn.tintColor = tintColor
         btn.setImage(image, for: .normal)
-        btn.backgroundColor = .systemGray2
+        btn.backgroundColor = bgColor
         return btn
     }
     

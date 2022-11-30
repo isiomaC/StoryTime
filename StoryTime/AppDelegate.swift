@@ -6,7 +6,7 @@
 //
 
 import UIKit
-//import FirebaseCore
+import FirebaseCore
 import IQKeyboardManagerSwift
 
 @main
@@ -16,8 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-//        FirebaseApp.configure()
+        FirebaseApp.configure()
         IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.previousNextDisplayMode = .alwaysShow
         startWindow()
         return true
     }
@@ -35,19 +36,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         let hasLaunched = UserDefaults.standard.bool(forKey: UserDefaultkeys.hasLaunched)
         
-        if hasLaunched == false{
+        if hasLaunched == false {
             
             self.window?.rootViewController = OnBoardingViewController()
             
         }else{
             
+            let isCurrentAuth = FirebaseService.shared.auth?.currentUser == nil ? false : true
+            
+            UserDefaults.standard.set(isCurrentAuth, forKey: UserDefaultkeys.isAuthenticated)
+            
             //MARK: TODO - Auth Logic
             let isAuth = UserDefaults.standard.bool(forKey: UserDefaultkeys.isAuthenticated)
-            if (isAuth){
-                // show app else show auth screen
-                
+            
+            if isAuth == true {
+                self.window?.rootViewController = TabBarController()
+            }else{
+                self.window?.rootViewController = LoginViewController()
             }
-            self.window?.rootViewController = TabBarController()
         }
         
         self.window?.makeKeyAndVisible()
@@ -62,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setRootViewController(_ vc: UIViewController, animated: Bool = true) {
-        guard animated, let window = self.window else {
+        guard let window = self.window else {
             self.window?.rootViewController = vc
             self.window?.makeKeyAndVisible()
             return

@@ -13,9 +13,11 @@ class Home{
 }
 
 
+// MARK: Home View DTOs
 enum Section {
     case main
 }
+
 
 enum ListItem: Hashable {
     case header(HeaderItem)
@@ -25,11 +27,21 @@ enum ListItem: Hashable {
 
 // Header cell data type
 struct HeaderItem: Hashable {
-    var imageName: String
-    var title: String
-    var subTitle: String
+    let imageName: String
+    let title: String
+    let subTitle: String
     let symbols: [ChildItem]
+    let image: UIImage
+    
+    init(imageName: String, title: String, subTitle: String, symbols: [ChildItem]){
+        self.imageName = imageName
+        self.title = title
+        self.subTitle = subTitle
+        self.symbols = symbols
+        self.image = UIImage(systemName: imageName)!
+    }
 }
+
 
 // Child cell data type
 struct ChildItem: Hashable {

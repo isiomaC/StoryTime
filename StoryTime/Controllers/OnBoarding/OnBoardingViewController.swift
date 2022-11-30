@@ -34,7 +34,7 @@ extension OnBoardingViewController {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         
         //MARK: TODO - Decide on where to go after on boarding..
-        appDelegate?.setRootViewController(TabBarController())
+        appDelegate?.setRootViewController(LoginViewController())
     }
 
 }

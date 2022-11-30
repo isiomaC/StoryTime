@@ -16,7 +16,7 @@ class WritingView: BaseView {
     
     lazy var continueBtn = ViewGenerator.getGradientButton(ButtonOptions(title: "Continue Writing", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
     
-    lazy var iconBtn = ViewGenerator.getSimpleImageButton(image: UIImage(systemName: "person.fill")!)
+    lazy var iconBtn = ViewGenerator.getSimpleImageButton(image: UIImage(systemName: "square.and.arrow.up")!)
     
     override func layoutSubviews(){
         super.layoutSubviews()
@@ -44,7 +44,7 @@ class WritingView: BaseView {
         inputTextView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 0.8).isActive = true
         inputTextView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         inputTextView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        inputTextView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
+        inputTextView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         
         continueBtn.topAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 20).isActive = true
         continueBtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true

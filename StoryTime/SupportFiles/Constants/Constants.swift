@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 
 let FIREBASENOINTERNETCODE = 17020
+let AUTHINVALIDPWD = 17009
+let AUTHUNREGISTEREDEMAIL = 17011
+let AUTHBADEMAILFORMAT = 17008
 
 
 // MARK: Screen Dimensions
@@ -32,11 +35,12 @@ struct VCNames{
 struct UserDefaultkeys {
     
     static let hasLaunched = "HasLaunched"
+    static let isAuthenticated = "UserAuthenticated"
+    
     
     static let firstCameraCheck = "FirstCameraAccessCheck"
-    static let isFirstLaunch = "isFirstLaunch"
     static let isSubscribed = "UserSubscribed"
-    static let isAuthenticated = "UserAuthenticated"
+   
     static let reviewWorthyCount = "reviewWorthyCount"
     static let lastReviewRequestAppVersion = "lastReviewedVersion"
     

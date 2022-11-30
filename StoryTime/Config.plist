@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SHARED_SECRET</key>
+	<string>todoCreate</string>
+	<key>BASE_API_URL</key>
+	<string>https://us-central1-storytime-b6181.cloudfunctions.net/webApi</string>
+	<key>VERSION</key>
+	<string>v1</string>
+</dict>
+</plist>

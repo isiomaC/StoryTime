@@ -10,10 +10,13 @@ import UIKit
 class ProfileViewController: CoordinatingDelegate {
     var coordinator: Coordinator?
     
+    var profileView = ProfileView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        view.backgroundColor = MyColors.primary
+        
+        view = profileView
     }
 
 

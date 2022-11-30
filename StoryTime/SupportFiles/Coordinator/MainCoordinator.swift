@@ -115,4 +115,10 @@ class MainCoordinator: Coordinator {
         currentChild = navigationController?.viewControllers.first as? CoordinatingDelegate
         children = navigationController?.viewControllers as? [CoordinatingDelegate]
     }
+    
+    func setRoot(_ vc: UIViewController){
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        
+        appDelegate?.setRootViewController(vc, animated: true)
+    }
 }

@@ -103,8 +103,8 @@ extension SignUpViewController {
                         FirebaseService.shared.saveDocument(.user, data: userSaveDto) { [weak self] (usersRef, error) in
                             guard let strongSelf = self, let ref = usersRef else { return }
                             
-                            if let err = error{
-                                strongSelf.showAlert(.error, (title: "Error", message: err.localizedDescription))
+                            if let _ = error{
+                                strongSelf.showAlert(.error, (title: "Error", message: "Something went wrong, Please try again"))
                             }else{
                                 
                                 userDto.id = ref.documentID

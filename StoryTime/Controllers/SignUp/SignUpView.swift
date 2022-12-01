@@ -11,7 +11,7 @@ import UIKit
 class SignUpView: BaseView{
     
     lazy var topArea = UIView()
-    lazy var iconImage = ViewGenerator.getImageView(ImageViewOptions(image: UIImage(named: "icon")!, size: (100, 100)))
+    lazy var iconImage = ViewGenerator.getImageView(ImageViewOptions(image: UIImage(named: "myIcon")!, size: (100, 100)))
     
     lazy var title = ViewGenerator.getLabel(LabelOptions(text: "Sign Up", color: .black, fontStyle: AppFonts.title))
     lazy var subTitle = ViewGenerator.getLabel(LabelOptions(text: "It only takes a minute", color: .black, fontStyle: AppFonts.caption))

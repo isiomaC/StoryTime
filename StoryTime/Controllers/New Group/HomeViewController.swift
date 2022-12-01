@@ -38,9 +38,9 @@ class HomeViewController: CoordinatingDelegate {
     }
     
     private func setUpActions(){
-        homeView.showMore.isUserInteractionEnabled = true
-        
-        homeView.showMore.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleShowMore)))
+//        homeView.showMore.isUserInteractionEnabled = true
+//
+//        homeView.showMore.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleShowMore)))
         
         homeView.nextBtn.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
     }
@@ -50,29 +50,29 @@ class HomeViewController: CoordinatingDelegate {
 //MARK: Objc functions
 extension HomeViewController{
     
-    @objc func toggleShowMore(){
-        
-        let currentText = homeView.showMore.text!
-        
-        if currentText.contains("more"){
-            
-            let newViews = viewModel.more.filter({ headerItem in
-                headerItem.title != viewModel.more[0].title
-            })
-            
-            viewModel.data.value?.append(contentsOf: newViews)
-            
-            homeView.showMore.text = "Show less"
-        }else{
-            
-            viewModel.data.value?.removeAll(where: { headerItem in
-                headerItem.title != viewModel.more[0].title
-            })
-            
-            homeView.showMore.text = "Show more"
-        }
-    }
-    
+//    @objc func toggleShowMore(){
+//
+//        let currentText = homeView.showMore.text!
+//
+//        if currentText.contains("more"){
+//
+//            let newViews = viewModel.more.filter({ headerItem in
+//                headerItem.title != viewModel.more[0].title
+//            })
+//
+//            viewModel.data.value?.append(contentsOf: newViews)
+//
+//            homeView.showMore.text = "Show less"
+//        }else{
+//
+//            viewModel.data.value?.removeAll(where: { headerItem in
+//                headerItem.title != viewModel.more[0].title
+//            })
+//
+//            homeView.showMore.text = "Show more"
+//        }
+//    }
+//
     @objc func nextAction(){
         
         let defaultLength = "Short(100 words)"

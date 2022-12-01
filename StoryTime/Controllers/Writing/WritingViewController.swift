@@ -12,7 +12,7 @@ class WritingViewController: BaseViewController{
 
     var writingView = WritingView()
     
-    private lazy var viewModel: WritingViewModel = WritingViewModel(view: writingView)
+    private lazy var viewModel = WritingViewModel(view: writingView)
     
     var selectedOptions: [String: Any] = [:]
     
@@ -24,7 +24,7 @@ class WritingViewController: BaseViewController{
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,8 +32,50 @@ class WritingViewController: BaseViewController{
         
         addBarButtonItems()
         
+        setUpViewData()
+        
+        setUpBinders()
     }
     
+    
+    private func setUpViewData(){
+        viewModel.writingText.value = selectedOptions["prompt"] as? String
+        viewModel.options.value = selectedOptions
+    }
+    
+    
+    private func setUpBinders(){
+        viewModel.writingText.bind { [weak self] text in
+            self?.viewModel.updateTextView()
+        }
+        
+        viewModel.options.bind { [weak self] text in
+            self?.viewModel.updateOptions()
+        }
+        
+        viewModel.error.bind { [weak self] text in
+            guard let strongSelf = self else { return }
+            self?.viewModel.handleError(strongSelf)
+        }
+    }
+}
+
+
+//MARK: Objc functions
+extension WritingViewController {
+    
+    @objc func speak(){
+        print("speak")
+    }
+    
+    @objc func options(){
+        print("options")
+    }
+}
+
+
+//MARK: Helpers
+extension WritingViewController {
     private func addBarButtonItems(){
         
         let item1 = UIBarButtonItem(image: UIImage(systemName: "speaker.wave.3.fill"), style: .plain, target: self, action: #selector(speak))
@@ -70,13 +112,5 @@ class WritingViewController: BaseViewController{
         let menu = UIMenu(title: "Text", image: UIImage(systemName: "square.stack.3d.up.fill"), identifier: .edit, options: .init(rawValue: 2), children: children)
         
         return menu
-    }
-    
-    @objc func speak(){
-        print("speak")
-    }
-    
-    @objc func options(){
-        print("options")
     }
 }

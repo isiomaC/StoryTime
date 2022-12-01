@@ -52,7 +52,7 @@
 		13B04EEF2932F885007E7637 /* WritingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EEE2932F885007E7637 /* WritingViewModel.swift */; };
 		13B04EF12933013C007E7637 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EF02933013C007E7637 /* BaseViewController.swift */; };
 		13B04EF329330450007E7637 /* MyNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EF229330450007E7637 /* MyNavigationController.swift */; };
-		13B04EF529330C5C007E7637 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B04EF429330C5C007E7637 /* icon.png */; };
+		13B04EF529330C5C007E7637 /* myIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B04EF429330C5C007E7637 /* myIcon.png */; };
 		13B04EF729330DDC007E7637 /* usecaseicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B04EF629330DDC007E7637 /* usecaseicon.png */; };
 		13B04EFB29334513007E7637 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EFA29334513007E7637 /* LoginViewController.swift */; };
 		13B04EFD29334523007E7637 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EFC29334523007E7637 /* SignUpViewController.swift */; };
@@ -138,7 +138,7 @@
 		13B04EEE2932F885007E7637 /* WritingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingViewModel.swift; sourceTree = "<group>"; };
 		13B04EF02933013C007E7637 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		13B04EF229330450007E7637 /* MyNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNavigationController.swift; sourceTree = "<group>"; };
-		13B04EF429330C5C007E7637 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		13B04EF429330C5C007E7637 /* myIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myIcon.png; sourceTree = "<group>"; };
 		13B04EF629330DDC007E7637 /* usecaseicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usecaseicon.png; sourceTree = "<group>"; };
 		13B04EFA29334513007E7637 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		13B04EFC29334523007E7637 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -207,7 +207,7 @@
 		133ABEA3292E8249000A2D96 /* StoryTime */ = {
 			isa = PBXGroup;
 			children = (
-				133ABF2B2930A9F2000A2D96 /* Assets */,
+				133ABF2B2930A9F2000A2D96 /* MyAssets */,
 				133ABEFF292F8AC5000A2D96 /* SupportFiles */,
 				133ABEFE292F8AA5000A2D96 /* Controllers */,
 				133ABEF4292F79AF000A2D96 /* ViewModels */,
@@ -373,15 +373,15 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
-		133ABF2B2930A9F2000A2D96 /* Assets */ = {
+		133ABF2B2930A9F2000A2D96 /* MyAssets */ = {
 			isa = PBXGroup;
 			children = (
 				13B04EF629330DDC007E7637 /* usecaseicon.png */,
-				13B04EF429330C5C007E7637 /* icon.png */,
+				13B04EF429330C5C007E7637 /* myIcon.png */,
 				133ABF2C2930AA1B000A2D96 /* undraw.png */,
 				133ABEAD292E8259000A2D96 /* Assets.xcassets */,
 			);
-			path = Assets;
+			path = MyAssets;
 			sourceTree = "<group>";
 		};
 		13B04EE62932EE7A007E7637 /* Writing */ = {
@@ -540,7 +540,7 @@
 				133ABED5292E926F000A2D96 /* GoogleService-Info.plist in Resources */,
 				133ABEB1292E8259000A2D96 /* LaunchScreen.storyboard in Resources */,
 				13B04EF729330DDC007E7637 /* usecaseicon.png in Resources */,
-				13B04EF529330C5C007E7637 /* icon.png in Resources */,
+				13B04EF529330C5C007E7637 /* myIcon.png in Resources */,
 				13B04F122933B0B4007E7637 /* Config.plist in Resources */,
 				133ABEAE292E8259000A2D96 /* Assets.xcassets in Resources */,
 				133ABF2D2930AA1B000A2D96 /* undraw.png in Resources */,

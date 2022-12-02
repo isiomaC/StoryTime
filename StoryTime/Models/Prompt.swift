@@ -6,23 +6,36 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
-struct PromptPost {
-    var prompt: String?
-    var model: String
-    var temperature: Decimal?
-    var maxTokens: Int?
-    var topP: Decimal?
-    var frequencyPenalty: Decimal?
-    var presencePenalty: Decimal?
+// MARK: For saving prompt to firebase firestore
+struct Prompt: Encodable {
+    var id: String
+    var prompt: String
+    var output: PromptOutputDTO
+    
+    enum CodingKeys: String, CodingKey{
+        case id
+        case prompt
+        case output
+    }
+    
+    static func raw(_ forEnum: CodingKeys) -> String{
+        return forEnum.rawValue
+    }
 }
 
-struct Prompt {
-    var prompt: String
-    var model: String
-    var temperature: Decimal
-    var maxTokens: Int
-    var topP: Decimal
-    var frequencyPenalty: Decimal
-    var presencePenalty: Decimal
+extension Prompt{
+    init?(snapShot: QueryDocumentSnapshot) {
+        guard
+            let prompt = snapShot.data()[Prompt.raw(.prompt)] as? String,
+            let output = snapShot.data()[Prompt.raw(.output)] as? PromptOutputDTO
+        else{
+            return nil
+        }
+
+        self.id = snapShot.documentID
+        self.prompt = prompt
+        self.output = output
+    }
 }

@@ -16,6 +16,30 @@ extension Notification.Name{
     static let promptFailure = Notification.Name("promptFailure")
 }
 
+
+extension UIView{
+    func addDropShadow(_ cornerRadius: CGFloat = 10){
+
+        // Drop Shadows
+        layer.cornerRadius = cornerRadius
+        layer.masksToBounds = false
+
+        // How blurred the shadow is
+        layer.shadowRadius = 8.0
+
+        // The color of the drop shadow
+        let isDark = UIScreen.main.traitCollection.userInterfaceStyle == .dark ? true : false
+
+        layer.shadowColor = isDark ? UIColor.white.cgColor : UIColor.black.cgColor
+
+        // How transparent the drop shadow is
+        layer.shadowOpacity = 0.10
+
+        // How far the shadow is offset from the UICollectionViewCell’s frame
+        layer.shadowOffset = CGSize(width: 0, height: 10)
+    }
+}
+
 //MARK: Encodable
 extension Encodable {
 
@@ -90,10 +114,10 @@ extension UITextField {
         self.rightViewMode = .always
     }
     
-    func addBottomBorder(){
+    func addBottomBorder(_ color: UIColor = .label){
         let bottomLine = CALayer()
         bottomLine.frame = CGRect(x: 0.0, y: frame.height - 1, width: frame.width, height: 1.0)
-        bottomLine.backgroundColor = UIColor.label.cgColor
+        bottomLine.backgroundColor = color.cgColor
         borderStyle = UITextField.BorderStyle.none
         layer.addSublayer(bottomLine)
     }

@@ -9,7 +9,7 @@ import Foundation
 import SwiftyJSON
 
 protocol NetworkServiceDelegate{
-    func success(_ network: NetworkService, output: Prediction)
+    func success(_ network: NetworkService, output: PromptOutputDTO)
     func failure(error : Error?)
 }
 
@@ -34,83 +34,59 @@ struct NetworkService {
     private var SHARED_SECRET = Utils.readFromPList("Config", key: "SHARED_SECRET")
     
     
-    func getAIContent(name RoomName: String, uid : String){
-        let url = "\(APIURL)/\(VERSION)/prompt"
+    func postPrompt(_ prompt: String){
         
-        performPrediction(with: url)
-    }
-
-    private func performPrediction(with urlString: String){
+        let endpoint = "\(APIURL)/\(VERSION)/prompt"
         
         if Reachability.isConnectedToNetwork(){
-            if let url = URL(string: urlString){
-                
-                let session = URLSession(configuration: .default)
-                
-                let task = session.dataTask(with: url) { (data, response, error) in
-                    if let err = error{
-                        self.delegate?.failure(error: err)
-                    }
-                    
-                    if let responseData = data{
-                        if let prediction = self.parseJSON(data: responseData){
-                            self.delegate?.success(self, output: prediction)
-                        }
-                    }
+
+            guard let url = URL(string: endpoint) else { return }
+            
+            let body = [
+                "prompt": prompt
+            ]
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+            
+            guard let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+                return
+            }
+            request.httpBody = httpBody
+            
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: request) { (data, response, error) in
+                if let err = error{
+                    self.delegate?.failure(error: err)
                 }
                 
-                task.resume()
+                if let responseData = data{
+                    if let prediction = self.parseJSON(data: responseData){
+                        self.delegate?.success(self, output: prediction)
+                    }
+                }
             }
+            task.resume()
+          
         }else{
             delegate?.failure(error: NSError(domain: "No Internet Connection", code: 12000, userInfo: [:]))
         }
    
     }
     
+    
     //MARK:  Parse Prediction gotten from cloud function
-    private func parseJSON(data: Data) -> Prediction? {
+    private func parseJSON(data: Data) -> PromptOutputDTO? {
         let decoder = JSONDecoder()
         do{
-            let decoded = try decoder.decode(Prediction.self, from: data)
+            let decoded = try decoder.decode(PromptOutputDTO.self, from: data)
             
             return decoded
         }catch{
             delegate?.failure(error: error)
             return nil
         }
-    }
-    
-    
-    private func verifyReceipt(body: [String: Any], completion: @escaping(JSON?, Error?) -> Void){
-        let url = "\(APIURL)/\(VERSION)/verifyReceipt"
-        
-        guard let url = URL(string: url) else { return }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
-        
-        guard let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else {
-          return
-        }
-        request.httpBody = httpBody
-        
-        let session = URLSession(configuration: .default)  //URLSession.shared
-        let task = session.dataTask(with: request) { (data, response, error) in
-            if let err = error{
-                completion(nil, err)
-            }
-            
-            if let responseData = data{
-                do {
-                    let json = try JSON(data: responseData)
-                    completion(json, nil)
-                } catch {
-                     completion(nil, error)
-                }
-            }
-        }
-        task.resume()
     }
     
     
@@ -151,6 +127,39 @@ struct NetworkService {
                 print("Couldn't read receipt data with error")
             }
         }
+    }
+    
+    
+    private func verifyReceipt(body: [String: Any], completion: @escaping(JSON?, Error?) -> Void){
+        let url = "\(APIURL)/\(VERSION)/verifyReceipt"
+        
+        guard let url = URL(string: url) else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+          return
+        }
+        request.httpBody = httpBody
+        
+        let session = URLSession(configuration: .default)  //URLSession.shared
+        let task = session.dataTask(with: request) { (data, response, error) in
+            if let err = error{
+                completion(nil, err)
+            }
+            
+            if let responseData = data{
+                do {
+                    let json = try JSON(data: responseData)
+                    completion(json, nil)
+                } catch {
+                     completion(nil, error)
+                }
+            }
+        }
+        task.resume()
     }
 }
 

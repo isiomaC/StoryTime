@@ -14,6 +14,7 @@ import FirebaseFunctions
 enum CollectionName : String{
     case user
     case story
+    case promptOuput
 }
 
 

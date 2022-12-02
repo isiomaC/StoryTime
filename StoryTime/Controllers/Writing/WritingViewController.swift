@@ -12,7 +12,7 @@ class WritingViewController: BaseViewController{
 
     var writingView = WritingView()
     
-    private lazy var viewModel = WritingViewModel(view: writingView)
+    private lazy var viewModel = WritingViewModel()
     
     var selectedOptions: [String: Any] = [:]
     
@@ -28,41 +28,89 @@ class WritingViewController: BaseViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view = writingView
+        initialViewSetup()
         
-        addBarButtonItems()
-        
-        setUpViewData()
+        setUpActions()
         
         setUpBinders()
     }
+
     
-    
-    private func setUpViewData(){
-        viewModel.writingText.value = selectedOptions["prompt"] as? String
+    private func initialViewSetup(){
+        
+        view = (coordinator as? MainCoordinator)?.wrapScrollView(writingView)
+        
+        addBarButtonItems()
+        
+        viewModel.promptText.value = selectedOptions["prompt"] as? String
         viewModel.options.value = selectedOptions
     }
     
     
-    private func setUpBinders(){
-        viewModel.writingText.bind { [weak self] text in
-            self?.viewModel.updateTextView()
+    private func setUpBinders() {
+        
+        viewModel.promptText.bind { [weak self] text in
+            DispatchQueue.main.async{ [weak self] in
+                self?.writingView.promptField.text = text
+            }
         }
         
-        viewModel.options.bind { [weak self] text in
-            self?.viewModel.updateOptions()
+        
+        viewModel.options.bind {  opts in
+            print("Handle options change")
         }
         
-        viewModel.error.bind { [weak self] text in
-            guard let strongSelf = self else { return }
-            self?.viewModel.handleError(strongSelf)
+        
+        viewModel.errorText.bind { [weak self] error in
+            guard let strongSelf = self, let err = error else { return }
+            
+            DispatchQueue.main.async{
+                strongSelf.showAlert(.error, (title: "Error", message: err))
+            }
         }
+        
+        
+        viewModel.outputText.bind{ [weak self] output in
+            guard let out = output, let strongSelf = self else {
+                return
+            }
+            DispatchQueue.main.async{
+                strongSelf.writingView.outputField.text = out
+                strongSelf.writingView.wordCount.text = "\(out.split(separator: " ").count) words"
+            }
+        }
+    }
+    
+    private func setUpActions(){
+        writingView.promptBtn.addTarget(self, action: #selector(triggerPrompt), for: .touchUpInside)
+        
+        writingView.saveBtn.addTarget(self, action: #selector(saveOutput), for: .touchUpInside)
+        
+        writingView.iconBtn.addTarget(self, action: #selector(shareOutput), for: .touchUpInside)
     }
 }
 
 
 //MARK: Objc functions
 extension WritingViewController {
+    
+    @objc func triggerPrompt(){
+        guard let text = writingView.promptField.text else {
+            return
+        }
+        
+        if !text.isReallyEmpty{
+            viewModel.triggerPrompt(text)
+        }
+    }
+    
+    @objc func saveOutput(){
+        viewModel.savePromptOutput()
+    }
+    
+    @objc func shareOutput(){
+        
+    }
     
     @objc func speak(){
         print("speak")

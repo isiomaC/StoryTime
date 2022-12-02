@@ -8,39 +8,40 @@
 import Foundation
 
 
-class WritingViewModel{
+class WritingViewModel {
     
-    var writingText: ObservableObject<String> = ObservableObject(nil)
+    var promptText: ObservableObject<String> = ObservableObject(nil)
     
-    var error: ObservableObject<String> = ObservableObject(nil)
+    var errorText: ObservableObject<String> = ObservableObject(nil)
     
     var options: ObservableObject<[String: Any]?> = ObservableObject(nil)
     
-    var view: WritingView
+    var outputText: ObservableObject<String> = ObservableObject(nil)
     
-    init(view: WritingView){
-        self.view = view
+    
+    init(){
+        NetworkService.shared.delegate = self
     }
     
     //MARK: TODO - use network to get prompts from openai
-    func triggerPrompt(){
+    func triggerPrompt(_ text: String){
+        NetworkService.shared.postPrompt(text)
         
     }
     
-    //MARK: TODO - Prompt options will be listened for here
-    func updateOptions(){
-        print("Options Updated")
+    func savePromptOutput(){
+//        FirebaseService.shared.saveDocument(.promptOuput, data: <#T##[String : Any]#>)
     }
     
-    func updateTextView(){
-        view.inputTextView.text = writingText.value
+}
+
+
+extension WritingViewModel: NetworkServiceDelegate  {
+    func success(_ network: NetworkService, output: PromptOutputDTO) {
+        outputText.value = output.choices.first?.text
     }
     
-    func handleError(_ vc: WritingViewController) {
-        
-        guard let errString = error.value else { return }
-        
-        vc.showAlert(.error, ("Error", errString))
+    func failure(error: Error?) {
+        errorText.value = error?.localizedDescription
     }
-    
 }

@@ -37,7 +37,12 @@ class HomeView: BaseView{
     
     override func layoutSubviews(){
         super.layoutSubviews()
-        MyColors.setGradientBackground(view: nextBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
+        
+        MyColors.setGradientBackground(
+            view: nextBtn,
+            top: MyColors.topGradient,
+            bottom: MyColors.bottomGradient
+        )
         
 //        inputField.layer.borderColor = MyColors.primary.cgColor
 //        inputField.layer.borderWidth = CGFloat(1)

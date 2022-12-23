@@ -67,6 +67,7 @@ struct AppFonts {
     static let body = Font(size: .custom(16)).instance
     static let caption = Font(size: .custom(14)).instance
     static let small = Font(size: .custom(12)).instance
+    static let xsmall = Font(size: .custom(10)).instance
     
     enum Typography: Int {
         case h1 = 40
@@ -78,6 +79,7 @@ struct AppFonts {
         case body = 16
         case caption = 14
         case small = 12
+        case xsmall = 10
     }
     
     static func Bold(_ name: Typography) -> UIFont{

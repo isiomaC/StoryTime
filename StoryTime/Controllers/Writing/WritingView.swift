@@ -43,6 +43,10 @@ class WritingView: BaseView {
         wordCount.textAlignment = .right
     }
     
+    func setWordCount(_ count: Int){
+        wordCount.text = "\(count) words"
+    }
+    
     override func setUpViews() {
         
         backgroundColor = .systemBackground

@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+
 protocol Providable {
     associatedtype ProvidedItem: Hashable
     func provide(_ item: ProvidedItem)
@@ -34,7 +35,7 @@ class CollectionViewModel<CellType: UICollectionViewCell & Providable>: NSObject
         super.init()
     }
     
-    func update() {
+    private func update() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
         snapshot.appendItems(items.value!)

@@ -10,14 +10,82 @@ import UIKit
 
 class HomeViewModel: CollectionViewModel<HomeCell>{
     
-    public var error: ObservableObject<String?> = ObservableObject(nil)
+    public var error: ObservableObject<String> = ObservableObject(nil)
+    
+    var coordinator : Coordinator?
     
     init(collectionView: UICollectionView) {
         super.init(collectionView: collectionView, cellReuseIdentifier: "HomeCell")
+        
     }
     
-    override func update(){
-        super.update()
+    func triggerPrompt(_ text: String){
+        NetworkService.shared.postPrompt(text)
+    }
+    
+    func fetchPrompts(completion: @escaping([Prompt]?, Error?) -> Void) {
+        
+        let uid = FirebaseService.shared.getUID()
+        
+        FirebaseService.shared.getDocuments(.promptOuput, query: [ "userId": uid ]) { documentSnapShot, error in
+            guard let snapShot = documentSnapShot, error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            var prompts:[Prompt] = []
+            
+            for shot in snapShot{
+                if let existingPrompt = Prompt(snapShot: shot) {
+                    prompts.append(existingPrompt)
+                }
+            }
+            
+            completion(prompts, nil)
+        }
+    }
+
+}
+
+
+extension HomeViewModel: UICollectionViewDelegate {
+    
+    private func openStory(_ item: PromptDTO?){
+        
+        guard let myItem = item else {
+            return
+        }
+        
+        let mainCoordinator = coordinator as? MainCoordinator
+        let nextVC = WritingViewController(promptDto: myItem)
+        
+        mainCoordinator?.push(nextVC)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath.row)
+        if let myItems = items.value{
+            openStory(myItems[indexPath.row])
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+//MARK: Unused
+extension HomeViewModel{
+    
+    
+//    override func update(){
+//        super.update()
 //        if var snapShot = dataSource?.snapshot(){
 //            let itemsExist = snapShot.numberOfItems > 0
 //
@@ -51,34 +119,9 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
 ////                dataSource?.apply(sectionSnapshot, to: .main, animatingDifferences: true)
 //            }
 //        }
-    }
-    
-
-}
-
-
-extension HomeViewModel: UICollectionViewDelegate {
-    
-    private func openStory(_ item: PromptDTO?){
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
-        if let myItems = items.value{
-            openStory(myItems[indexPath.row])
-        }
-    }
+//    }
     
     
-    
-}
-
-
-
-
-//MARK: Unused
-extension HomeViewModel{
     
     
     // MARK: Start Will remove

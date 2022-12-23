@@ -80,8 +80,8 @@ struct NetworkService {
     private func parseJSON(data: Data) -> PromptOutputDTO? {
         let decoder = JSONDecoder()
         do{
-            let decoded = try decoder.decode(PromptOutputDTO.self, from: data)
             
+            let decoded = try decoder.decode(PromptOutputDTO.self, from: data)
             return decoded
         }catch{
             delegate?.failure(error: error)

@@ -12,18 +12,22 @@ class HomeCell: UICollectionViewCell, Providable {
     
     typealias ProvidedItem = PromptDTO
     
-    lazy var imageView = ViewGenerator.getImageView(ImageViewOptions(image: nil, size: (100, 100)))
+//    lazy var imageView = ViewGenerator.getImageView(ImageViewOptions(image: nil, size: (100, 100)))
 
     lazy var title = ViewGenerator.getLabel(LabelOptions(text: "title", color: .label, fontStyle: AppFonts.Bold(.body)))
 
     lazy var subTitle = ViewGenerator.getLabel(LabelOptions(text: "subtitle", color: .label, fontStyle: AppFonts.caption))
+    
+    lazy var time = ViewGenerator.getLabel(LabelOptions(text: "2 mins ago", color: .label, fontStyle: AppFonts.small))
 
+    
     let cornerRadius: CGFloat = 10
-
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpViews()
+        
+        contentView.backgroundColor = MyColors.topGradient
     }
 
     required init?(coder: NSCoder) {
@@ -31,9 +35,9 @@ class HomeCell: UICollectionViewCell, Providable {
     }
 
     public func provide(_ promptDto: PromptDTO) {
-//        title.text = promptDto.text
-//        subTitle.text = promptDto.prompts
-        imageView.image = UIImage(systemName: "trash")
+        title.text = promptDto.prompt
+        subTitle.text = promptDto.outputText
+//        imageView.image = UIImage(systemName: "trash")
     }
 
 
@@ -42,17 +46,16 @@ class HomeCell: UICollectionViewCell, Providable {
         
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
         
-        addDropShadow()
+//        addDropShadow()
         contentView.layer.masksToBounds = true
         contentView.layer.cornerRadius = cornerRadius
 //        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = MyColors.primary.cgColor
 
         // Specify a shadowPath to improve shadow drawing performance
-        layer.shadowPath = UIBezierPath(
-            roundedRect: bounds,
-            cornerRadius: cornerRadius
-        ).cgPath
+//        layer.shadowPath = UIBezierPath(
+//            roundedRect: bounds,
+//            cornerRadius: cornerRadius
+//        ).cgPath
     }
 
 
@@ -83,11 +86,12 @@ class HomeCell: UICollectionViewCell, Providable {
         subTitle.adjustsFontSizeToFitWidth = false
         subTitle.lineBreakMode = .byTruncatingTail
         
-        contentView.sizeToFit()
-        contentView.addSubview(imageView)
+//        contentView.addSubview(imageView)
         contentView.addSubview(title)
         contentView.addSubview(subTitle)
+        contentView.addSubview(time)
         contentView.backgroundColor = .systemBackground
+        contentView.sizeToFit()
         addConstraint()
     }
 
@@ -103,20 +107,21 @@ class HomeCell: UICollectionViewCell, Providable {
 
 //        contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth, .flexibleTopMargin]
 
-        imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//        imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+//        imageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+//        imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
+//        imageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
+        time.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
+        time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
         
-        title.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
-        title.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
+        title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+//        title.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
         title.bottomAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10).isActive = true
-        title.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
+        title.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95).isActive = true
 
-        subTitle.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 5).isActive = true
-        subTitle.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
-        subTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
+        subTitle.topAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        subTitle.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95).isActive = true
     }
 
 }

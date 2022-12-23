@@ -25,12 +25,12 @@ struct User : Codable{
         return forEnum.rawValue
     }
     
-    func remove(_ key: String = "id") -> [String: Any]?{
+    func removeKey(_ key: String = "id") -> [String: Any]?{
         var object = self.dictionary
         guard let index = object.index(forKey: key) else {
             return nil
         }
-        let removedId = object.remove(at: index)
+        let _ = object.remove(at: index)
         return object
     }
 }

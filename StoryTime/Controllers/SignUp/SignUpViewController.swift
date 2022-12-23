@@ -95,7 +95,7 @@ extension SignUpViewController {
                                               guid: userData.user.uid,
                                               timestamp: Date())
                         
-                        guard let userSaveDto = userDto.remove() else {
+                        guard let userSaveDto = userDto.removeKey() else {
                             strongSelf.showAlert(.error, (title: "Error", message: "No internet connection"))
                             return
                         }

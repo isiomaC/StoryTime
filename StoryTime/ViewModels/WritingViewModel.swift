@@ -14,14 +14,13 @@ class WritingViewModel {
     
     var errorText: ObservableObject<String> = ObservableObject(nil)
     
-    var options: ObservableObject<[String: Any]?> = ObservableObject(nil)
+//    var options: ObservableObject<[String: Any]?> = ObservableObject(nil)
     
     var outputText: ObservableObject<String> = ObservableObject(nil)
     
+    var currentPrompt: PromptDTO?
     
-    init(){
-        NetworkService.shared.delegate = self
-    }
+    init(){ }
     
     //MARK: TODO - use network to get prompts from openai
     func triggerPrompt(_ text: String){
@@ -29,19 +28,23 @@ class WritingViewModel {
         
     }
     
-    func savePromptOutput(){
-//        FirebaseService.shared.saveDocument(.promptOuput, data: <#T##[String : Any]#>)
+    func updatePromptOuput(_ uid: String, prompt: PromptDTO?){
+        
     }
     
-}
-
-
-extension WritingViewModel: NetworkServiceDelegate  {
-    func success(_ network: NetworkService, output: PromptOutputDTO) {
-        outputText.value = output.choices.first?.text
+    func savePromptOutput(_ uid: String, prompt: PromptDTO?){
+        
+        guard let myPrompt = prompt, let promptText = myPrompt.prompt, let promptOuput = myPrompt.promptOutput else {
+            return
+        }
+        
+        let newPrompt = Prompt(id: "", prompt: promptText, userId: uid, output: promptOuput)
+        
+        guard let promptToSave = newPrompt.removeKey() else {
+            return
+        }
+        
+        FirebaseService.shared.saveDocument(.promptOuput, data: promptToSave)
     }
     
-    func failure(error: Error?) {
-        errorText.value = error?.localizedDescription
-    }
 }

@@ -7,19 +7,21 @@
 
 import UIKit
 
-class HomeViewController: CoordinatingDelegate {
-    
-    var coordinator: Coordinator?
+class HomeViewController: BaseViewController {
     
     var collectionView: UICollectionView!
     
     private lazy var viewModel = HomeViewModel(collectionView: collectionView)
     
     var homeView = HomeView()
+    
+    var newPrompt: PromptDTO?
 
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        title = "Home"
         
         self.navigationItem.backBarButtonItem?.title = ""
         
@@ -29,13 +31,49 @@ class HomeViewController: CoordinatingDelegate {
         
         setUpActions()
         
-//        viewModel.add([Story(id: "tes2", text: "test String2 test String test String test String test String  test String test String", prompts: "testing Prompt2 test String test String test String test String test String test String test String test String", userId: "testinfI2", type: "Story2", dateCreated: Date())])
+        setUpBinders()
         
-        fetchStories()
+        viewModel.coordinator = coordinator
+        
+//        viewModel.add([PromptDTO(id: "tes2", prompt: "test String2 test String test String test String test String  test String test String", promptOutput: nil)])
+        
+//        fetchPrompts()
+        
     }
     
-    private func fetchStories(){
-//        viewModel.add([Story(id: "tes", text: "test String", prompts: "testing Prompt", userId: "testinfI", type: "Story", dateCreated: Date())])
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NetworkService.shared.delegate = self
+        
+        fetchPrompts()
+    }
+    
+    private func setUpBinders(){
+        viewModel.error.bind { [weak self] errorString in
+            if let err = errorString {
+                self?.showAlert(.error, (title: "Error", message: err ))
+            }
+        }
+    }
+    
+    private func fetchPrompts(){
+        
+        viewModel.fetchPrompts { [weak self] prompts, error in
+            guard error == nil, let allPrompts = prompts else {
+                self?.viewModel.error.value = error?.localizedDescription
+                return
+            }
+            
+            let allPromptDto = allPrompts.map { prompt in
+                return prompt.toPrompDto()
+            }
+            
+            self?.viewModel.remove(allPromptDto)
+            self?.viewModel.add(allPromptDto)
+            
+        }
     }
     
     private func setUpActions(){
@@ -45,26 +83,30 @@ class HomeViewController: CoordinatingDelegate {
 
 }
 
+
 //MARK: Objc functions
 extension HomeViewController{
     
     @objc func nextAction(){
 
-        guard let prompt = homeView.inputField.text else {
+        guard let newPromptText = homeView.inputField.text else {
             return
         }
 
         // Required for Prompts
-        if prompt.isReallyEmpty {
+        if newPromptText.isReallyEmpty {
             showAlert(.error, (title: "Error", message: "Please fill in prompt field"))
             return
         }
 
-        var selectedOptions: [String: Any] = [:]
-
-        selectedOptions["prompt"] = prompt.trim()
-
-        (coordinator as? MainCoordinator)?.push(WritingViewController(options: selectedOptions))
+        newPrompt = PromptDTO(id: nil, prompt: newPromptText.trim(), promptOutput: nil)
+        
+        //MARK: TODO - Call API here to get prompt before showing the page
+        if let new = newPrompt, let promptText = new.prompt{
+            let mCoordinator = (coordinator as? MainCoordinator)
+            mCoordinator?.navigationController?.startActivityIndicator()
+            viewModel.triggerPrompt(promptText)
+        }
     }
 
     private func getOptionValue(_ selection: ChildItem?) -> Any?{
@@ -73,6 +115,37 @@ extension HomeViewController{
         }
         return select.title
     }
+}
+
+
+//MARK: NetworkServiceDelegate
+extension HomeViewController: NetworkServiceDelegate {
+    func success(_ network: NetworkService, output: PromptOutputDTO) {
+        
+//        let outputText = (newPrompt?.prompt)! + " \n " +
+        guard let firstOutput = output.choices.first else {
+            return
+        }
+        
+        newPrompt?.outputText = firstOutput.text
+        newPrompt?.promptOutput = output
+        
+        DispatchQueue.main.async { [weak self] in
+            let mCoordinator = (self?.coordinator as? MainCoordinator)
+            mCoordinator?.navigationController?.stopActivityIndicator()
+            mCoordinator?.push(WritingViewController(promptDto: (self?.newPrompt)!))
+        }
+        
+    }
+    
+    func failure(error: Error?) {
+        print(error)
+        DispatchQueue.main.async { [weak self] in
+            (self?.coordinator as? MainCoordinator)?.navigationController?.stopActivityIndicator()
+            
+        }
+    }
+
 }
 
 
@@ -90,7 +163,7 @@ extension HomeViewController {
 
         collectionView.delegate = viewModel
 
-        collectionView.backgroundColor = .red
+//        collectionView.backgroundColor = .red
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -102,7 +175,6 @@ extension HomeViewController {
         ])
         
         viewModel.dataSource = viewModel.makeDataSource()
-        
     }
 }
 

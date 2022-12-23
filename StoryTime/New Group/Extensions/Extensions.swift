@@ -36,7 +36,7 @@ extension UIView{
         layer.shadowOpacity = 0.10
 
         // How far the shadow is offset from the UICollectionViewCell’s frame
-        layer.shadowOffset = CGSize(width: 0, height: 10)
+        layer.shadowOffset = CGSize(width: 0, height: 5)
     }
 }
 
@@ -123,6 +123,38 @@ extension UITextField {
     }
 }
 
+//MARK: UITextView
+extension UITextView{
+    func setTyping(text: String, characterDelay: TimeInterval = 5.0) {
+        
+        //Clean up - it exist already
+        self.text = ""
+//        if let currentAttributeText = self.attributedText as? NSMutableAttributedString {
+//            currentAttributeText.removeAttribute(NSAttributedString.Key.underlineStyle, range: (text as NSString).range(of: prompt))
+//            currentAttributeText.removeAttribute(NSAttributedString.Key.font, range: NSMakeRange(0, currentAttributeText.length))
+//
+//            self.attributedText = currentAttributeText
+//        }
+        
+        let writingTask = DispatchWorkItem { [weak self] in
+            text.forEach { char in
+                DispatchQueue.main.async {
+                    self?.text?.append(char)
+                }
+                Thread.sleep(forTimeInterval: characterDelay/100)
+            }
+            
+            DispatchQueue.main.async {
+//                self?.text = ""
+//                self?.attributedText = Utils.attributedText(text, targetString: prompt, font: AppFonts.body)
+            }
+        }
+        
+        let queue: DispatchQueue = .init(label: "typespeed", qos: .userInteractive)
+        queue.asyncAfter(deadline: .now() + 0.05, execute: writingTask)
+    }
+}
+
 
 //MARK: UIViewController
 extension UIViewController{
@@ -140,6 +172,8 @@ extension UIViewController{
         self.present(alert, animated: true, completion: nil)
         
     }
+    
+   
 }
 
 

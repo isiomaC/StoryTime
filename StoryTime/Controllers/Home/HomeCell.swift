@@ -8,141 +8,120 @@
 import Foundation
 import UIKit
 
-class HomeCell: UICollectionViewListCell, Providable {
-    typealias ProvidedItem = ListItem
+class HomeCell: UICollectionViewCell, Providable {
     
-    public func provide(_ homeDto: ListItem) {
-        
-        
-    }
-}
-
-
-//class HomeCell: UICollectionViewCell, Providable{
-//
-////    typealias ProvidedItem = HomeDto
-//    typealias ProvidedItem = ListItem
-//
+    typealias ProvidedItem = PromptDTO
+    
 //    lazy var imageView = ViewGenerator.getImageView(ImageViewOptions(image: nil, size: (100, 100)))
-//
-//    lazy var title = ViewGenerator.getLabel(LabelOptions(text: "title", color: .label, fontStyle: AppFonts.Bold(.subtitle)))
-//
-//    lazy var subTitle = ViewGenerator.getLabel(LabelOptions(text: "subtitle", color: .label, fontStyle: AppFonts.caption))
-//
-//    let cornerRadius: CGFloat = 10
-//
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setUpViews()
-//    }
-//
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//
-//    public func provide(_ homeDto: ListItem) {
-//        //set values for views here
-////        imageView.image = UIImage(named: homeDto.imageName)
-////        title.text = homeDto.title
-////        subTitle.text = homeDto.subTitle
-//    }
-//
-//
-//    private func addDropShadow(){
-//
-//        // Drop Shadows
-//        layer.cornerRadius = cornerRadius
-//        layer.masksToBounds = false
-//
-//        // How blurred the shadow is
-//        layer.shadowRadius = 8.0
-//
-//        // The color of the drop shadow
-//        let isDark = UIScreen.main.traitCollection.userInterfaceStyle == .dark ? true : false
-//
-//        layer.shadowColor = isDark ? UIColor.white.cgColor : UIColor.black.cgColor
-//
-//        // How transparent the drop shadow is
-//        layer.shadowOpacity = 0.10
-//
-//        // How far the shadow is offset from the UICollectionViewCell’s frame
-//        layer.shadowOffset = CGSize(width: 0, height: 10)
-//
-//    }
-//
-//
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//
-//        contentView.layer.masksToBounds = true
-//        contentView.layer.cornerRadius = cornerRadius
-////        contentView.layer.borderWidth = 1
-//        contentView.layer.borderColor = MyColors.primary.cgColor
-//
-//        // Specify a shadowPath to improve shadow drawing performance
+
+    lazy var title = ViewGenerator.getLabel(LabelOptions(text: "title", color: .label, fontStyle: AppFonts.Bold(.body)))
+
+    lazy var subTitle = ViewGenerator.getLabel(LabelOptions(text: "subtitle", color: .label, fontStyle: AppFonts.caption))
+    
+    lazy var time = ViewGenerator.getLabel(LabelOptions(text: "2 mins ago", color: .label, fontStyle: AppFonts.small))
+
+    
+    let cornerRadius: CGFloat = 10
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUpViews()
+        
+        contentView.backgroundColor = MyColors.topGradient
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    public func provide(_ promptDto: PromptDTO) {
+        title.text = promptDto.prompt
+        subTitle.text = promptDto.outputText
+//        imageView.image = UIImage(systemName: "trash")
+    }
+
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
+        
+//        addDropShadow()
+        contentView.layer.masksToBounds = true
+        contentView.layer.cornerRadius = cornerRadius
+//        contentView.layer.borderWidth = 1
+
+        // Specify a shadowPath to improve shadow drawing performance
 //        layer.shadowPath = UIBezierPath(
 //            roundedRect: bounds,
 //            cornerRadius: cornerRadius
 //        ).cgPath
-//    }
-//
-//
-//    //MARK: Detect dark and light Mode Changes
-//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-//        super.traitCollectionDidChange(previousTraitCollection)
-//
-//        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-//
-//            if traitCollection.userInterfaceStyle == .dark {
-//                layer.shadowColor = UIColor.white.cgColor
-//            }else{
-//                layer.shadowColor = UIColor.black.cgColor
-//            }
-//        }
-//    }
-//
-//
-//    private func setUpViews(){
-//
-//        title.textAlignment = .left
-//        subTitle.textAlignment = .left
-//
-//        addDropShadow()
-//
-//        contentView.sizeToFit()
+    }
+
+
+    //MARK: Detect dark and light Mode Changes
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+
+            if traitCollection.userInterfaceStyle == .dark {
+                layer.shadowColor = UIColor.white.cgColor
+            }else{
+                layer.shadowColor = UIColor.black.cgColor
+            }
+        }
+    }
+
+
+    private func setUpViews(){
+
+        title.textAlignment = .left
+        title.numberOfLines = 1
+        title.adjustsFontSizeToFitWidth = false
+        title.lineBreakMode = .byTruncatingTail
+        
+        subTitle.textAlignment = .left
+        subTitle.numberOfLines = 1
+        subTitle.adjustsFontSizeToFitWidth = false
+        subTitle.lineBreakMode = .byTruncatingTail
+        
 //        contentView.addSubview(imageView)
-//        contentView.addSubview(title)
-//        contentView.addSubview(subTitle)
-//        contentView.backgroundColor = .systemBackground
-//        addConstraint()
-//    }
-//
-//    private func addConstraint(){
-//
-//        contentView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        contentView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-//        contentView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        contentView.addSubview(title)
+        contentView.addSubview(subTitle)
+        contentView.addSubview(time)
+        contentView.backgroundColor = .systemBackground
+        contentView.sizeToFit()
+        addConstraint()
+    }
+
+    private func addConstraint(){
+
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+
+        contentView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        contentView.topAnchor.constraint(equalTo: topAnchor).isActive = true
 //        contentView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-//        contentView.widthAnchor.constraint(equalToConstant: Dimensions.SCREENSIZE.width - 25).isActive = true
-//
-////        contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth, .flexibleTopMargin]
-//
+        contentView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        contentView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+
+//        contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth, .flexibleTopMargin]
+
 //        imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-//        imageView.widthAnchor.constraint(equalToConstant: 80).isActive = true
+//        imageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
 //        imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
-//        imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
-//
+//        imageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        time.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
+        time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
+        
+        title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
 //        title.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
-//        title.bottomAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10).isActive = true
-//        title.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
-//
-//        subTitle.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 5).isActive = true
-//        subTitle.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
-//        subTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
-//
-//    }
-//}
+        title.bottomAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10).isActive = true
+        title.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95).isActive = true
+
+        subTitle.topAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        subTitle.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95).isActive = true
+    }
+
+}

@@ -8,13 +8,14 @@
 import Foundation
 import UIKit
 
+
 protocol Providable {
     associatedtype ProvidedItem: Hashable
     func provide(_ item: ProvidedItem)
 }
 
 
-class CollectionViewModel<CellType: UICollectionViewListCell & Providable>: NSObject {
+class CollectionViewModel<CellType: UICollectionViewCell & Providable>: NSObject {
     
     // Typealiases for our convenience
     typealias Item = CellType.ProvidedItem
@@ -34,15 +35,14 @@ class CollectionViewModel<CellType: UICollectionViewListCell & Providable>: NSOb
         super.init()
     }
     
-    func update() {
-//        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-//        snapshot.appendSections([.main])
-//        snapshot.appendItems(items.value!)
-//        dataSource?.apply(snapshot)
-        
+    private func update() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(items.value!)
+        dataSource?.apply(snapshot)
     }
     
-    //NOT used
+
     public func add(_ items: [Item]) {
         items.forEach {
             self.items.value?.append($0)
@@ -51,7 +51,7 @@ class CollectionViewModel<CellType: UICollectionViewListCell & Providable>: NSOb
         update()
     }
     
-    //NOT used
+    
     public func remove(_ items: [Item]) {
         items.forEach { item in
             self.items.value?.removeAll { $0 == item }
@@ -62,7 +62,6 @@ class CollectionViewModel<CellType: UICollectionViewListCell & Providable>: NSOb
 }
 
 
-//NOT used
 extension CollectionViewModel {
     private func cellProvider(_ collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! CellType

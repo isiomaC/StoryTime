@@ -8,39 +8,43 @@
 import Foundation
 
 
-class WritingViewModel{
+class WritingViewModel {
     
-    var writingText: ObservableObject<String> = ObservableObject(nil)
+    var promptText: ObservableObject<String> = ObservableObject(nil)
     
-    var error: ObservableObject<String> = ObservableObject(nil)
+    var errorText: ObservableObject<String> = ObservableObject(nil)
     
-    var options: ObservableObject<[String: Any]?> = ObservableObject(nil)
+//    var options: ObservableObject<[String: Any]?> = ObservableObject(nil)
     
-    var view: WritingView
+    var outputText: ObservableObject<String> = ObservableObject(nil)
     
-    init(view: WritingView){
-        self.view = view
-    }
+    var currentPrompt: PromptDTO?
+    
+    init(){ }
     
     //MARK: TODO - use network to get prompts from openai
-    func triggerPrompt(){
+    func triggerPrompt(_ text: String){
+        NetworkService.shared.postPrompt(text)
         
     }
     
-    //MARK: TODO - Prompt options will be listened for here
-    func updateOptions(){
-        print("Options Updated")
+    func updatePromptOuput(_ uid: String, prompt: PromptDTO?){
+        
     }
     
-    func updateTextView(){
-        view.inputTextView.text = writingText.value
-    }
-    
-    func handleError(_ vc: WritingViewController) {
+    func savePromptOutput(_ uid: String, prompt: PromptDTO?){
         
-        guard let errString = error.value else { return }
+        guard let myPrompt = prompt, let promptText = myPrompt.prompt, let promptOuput = myPrompt.promptOutput else {
+            return
+        }
         
-        vc.showAlert(.error, ("Error", errString))
+        let newPrompt = Prompt(id: "", prompt: promptText, userId: uid, output: promptOuput)
+        
+        guard let promptToSave = newPrompt.removeKey() else {
+            return
+        }
+        
+        FirebaseService.shared.saveDocument(.promptOuput, data: promptToSave)
     }
     
 }

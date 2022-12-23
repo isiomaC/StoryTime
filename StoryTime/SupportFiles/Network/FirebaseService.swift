@@ -14,6 +14,7 @@ import FirebaseFunctions
 enum CollectionName : String{
     case user
     case story
+    case promptOuput
 }
 
 
@@ -77,10 +78,10 @@ class FirebaseService {
     
     // MARK: Get Document Section
     
-    func getById(_ collectionName: CollectionName, Id: String, completion: @escaping DocumentSnapshotHandler ){
+    func getById(_ collectionName: CollectionName, id: String, completion: @escaping DocumentSnapshotHandler ){
         let collection = collectionName.rawValue
         
-        db?.collection(collection).document(Id).getDocument(completion: { (snapShot, error) in
+        db?.collection(collection).document(id).getDocument(completion: { (snapShot, error) in
             if let err = error {
                 completion(nil, err)
             }else{

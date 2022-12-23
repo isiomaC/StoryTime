@@ -20,7 +20,6 @@
 		133ABEEE292F5298000A2D96 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEED292F5298000A2D96 /* Extensions.swift */; };
 		133ABEF1292F53A4000A2D96 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEF0292F53A3000A2D96 /* Reachability.swift */; };
 		133ABEF3292F58E1000A2D96 /* ObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEF2292F58E1000A2D96 /* ObservableObject.swift */; };
-		133ABEF7292F7A22000A2D96 /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEF6292F7A22000A2D96 /* Story.swift */; };
 		133ABEF9292F7A46000A2D96 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEF8292F7A46000A2D96 /* User.swift */; };
 		133ABEFB292F88BD000A2D96 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEFA292F88BC000A2D96 /* HomeViewModel.swift */; };
 		133ABEFD292F8A03000A2D96 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEFC292F8A03000A2D96 /* FirebaseService.swift */; };
@@ -45,6 +44,7 @@
 		133ABF3129315F8F000A2D96 /* CollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF3029315F8F000A2D96 /* CollectionViewModel.swift */; };
 		133ABF3329316226000A2D96 /* HomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF3229316226000A2D96 /* HomeCell.swift */; };
 		133ABF35293165A8000A2D96 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF34293165A8000A2D96 /* HomeView.swift */; };
+		138DC8A0293A3C8F002522B4 /* PromptDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138DC89F293A3C8F002522B4 /* PromptDTO.swift */; };
 		13B04EE5293198B0007E7637 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 13B04EE4293198B0007E7637 /* IQKeyboardManagerSwift */; };
 		13B04EE92932EED8007E7637 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EE82932EED8007E7637 /* SettingsViewController.swift */; };
 		13B04EEB2932EEEA007E7637 /* WritingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EEA2932EEEA007E7637 /* WritingViewController.swift */; };
@@ -63,7 +63,6 @@
 		13B04F0829338E9B007E7637 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 13B04F0729338E9B007E7637 /* FirebaseFunctions */; };
 		13B04F0A29338E9B007E7637 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 13B04F0929338E9B007E7637 /* FirebaseStorage */; };
 		13B04F0C2933ACB6007E7637 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04F0B2933ACB6007E7637 /* NetworkService.swift */; };
-		13B04F0E2933AD8C007E7637 /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04F0D2933AD8C007E7637 /* Prediction.swift */; };
 		13B04F102933AE8A007E7637 /* Prompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04F0F2933AE8A007E7637 /* Prompt.swift */; };
 		13B04F122933B0B4007E7637 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13B04F112933B0B4007E7637 /* Config.plist */; };
 		13B04F142933B11E007E7637 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04F132933B11E007E7637 /* Utils.swift */; };
@@ -107,7 +106,6 @@
 		133ABEED292F5298000A2D96 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		133ABEF0292F53A3000A2D96 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		133ABEF2292F58E1000A2D96 /* ObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObject.swift; sourceTree = "<group>"; };
-		133ABEF6292F7A22000A2D96 /* Story.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
 		133ABEF8292F7A46000A2D96 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		133ABEFA292F88BC000A2D96 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		133ABEFC292F8A03000A2D96 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
@@ -132,6 +130,7 @@
 		133ABF3029315F8F000A2D96 /* CollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewModel.swift; sourceTree = "<group>"; };
 		133ABF3229316226000A2D96 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
 		133ABF34293165A8000A2D96 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		138DC89F293A3C8F002522B4 /* PromptDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptDTO.swift; sourceTree = "<group>"; };
 		13B04EE82932EED8007E7637 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		13B04EEA2932EEEA007E7637 /* WritingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingViewController.swift; sourceTree = "<group>"; };
 		13B04EEC2932F876007E7637 /* WritingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingView.swift; sourceTree = "<group>"; };
@@ -145,7 +144,6 @@
 		13B04EFE29334595007E7637 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		13B04F00293345B8007E7637 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		13B04F0B2933ACB6007E7637 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		13B04F0D2933AD8C007E7637 /* Prediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prediction.swift; sourceTree = "<group>"; };
 		13B04F0F2933AE8A007E7637 /* Prompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prompt.swift; sourceTree = "<group>"; };
 		13B04F112933B0B4007E7637 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		13B04F132933B11E007E7637 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -287,10 +285,9 @@
 		133ABEF5292F79B8000A2D96 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				133ABEF6292F7A22000A2D96 /* Story.swift */,
+				138DC89E293A3C74002522B4 /* DTO */,
 				133ABEF8292F7A46000A2D96 /* User.swift */,
 				133ABF03292F8B90000A2D96 /* Home.swift */,
-				13B04F0D2933AD8C007E7637 /* Prediction.swift */,
 				13B04F0F2933AE8A007E7637 /* Prompt.swift */,
 			);
 			path = Models;
@@ -382,6 +379,14 @@
 				133ABEAD292E8259000A2D96 /* Assets.xcassets */,
 			);
 			path = MyAssets;
+			sourceTree = "<group>";
+		};
+		138DC89E293A3C74002522B4 /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				138DC89F293A3C8F002522B4 /* PromptDTO.swift */,
+			);
+			path = DTO;
 			sourceTree = "<group>";
 		};
 		13B04EE62932EE7A007E7637 /* Writing */ = {
@@ -570,7 +575,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				133ABF282930A208000A2D96 /* PaddedLabel.swift in Sources */,
-				133ABEF7292F7A22000A2D96 /* Story.swift in Sources */,
 				133ABF1529309B67000A2D96 /* ProfileViewModel.swift in Sources */,
 				133ABF1A29309D16000A2D96 /* Enums.swift in Sources */,
 				133ABF3329316226000A2D96 /* HomeCell.swift in Sources */,
@@ -603,7 +607,7 @@
 				133ABF1F29309E87000A2D96 /* OnBoardView.swift in Sources */,
 				133ABF11292F940C000A2D96 /* Font.swift in Sources */,
 				133ABF2F2930BB74000A2D96 /* GradientButton.swift in Sources */,
-				13B04F0E2933AD8C007E7637 /* Prediction.swift in Sources */,
+				138DC8A0293A3C8F002522B4 /* PromptDTO.swift in Sources */,
 				133ABEEE292F5298000A2D96 /* Extensions.swift in Sources */,
 				13B04F102933AE8A007E7637 /* Prompt.swift in Sources */,
 				133ABF2129309F79000A2D96 /* BaseView.swift in Sources */,

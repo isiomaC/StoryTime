@@ -12,22 +12,30 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
     
     public var error: ObservableObject<String> = ObservableObject(nil)
     
+    public var userToken: ObservableObject<TokenDTO> = ObservableObject(nil)
+    
     var coordinator : Coordinator?
     
+    var userId: String
+    
     init(collectionView: UICollectionView) {
+        self.userId = FirebaseService.shared.getUID()
         super.init(collectionView: collectionView, cellReuseIdentifier: "HomeCell")
-        
     }
     
     func triggerPrompt(_ text: String){
         NetworkService.shared.postPrompt(text)
     }
     
+    func fetchToken(completion: @escaping(TokenDTO?, Error?) -> Void){
+        TokenManager.shared.fetchUserToken(userId: userId) { token, error in
+            completion(token, error)
+        }
+    }
+    
     func fetchPrompts(completion: @escaping([Prompt]?, Error?) -> Void) {
-        
-        let uid = FirebaseService.shared.getUID()
-        
-        FirebaseService.shared.getDocuments(.promptOuput, query: [ "userId": uid ]) { documentSnapShot, error in
+
+        FirebaseService.shared.getDocuments(.promptOuput, query: [ "userId": userId ]) { documentSnapShot, error in
             guard let snapShot = documentSnapShot, error == nil else {
                 completion(nil, error)
                 return

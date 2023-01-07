@@ -28,6 +28,7 @@ class HomeCell: UICollectionViewCell, Providable {
         setUpViews()
         
         contentView.backgroundColor = MyColors.topGradient
+        
     }
 
     required init?(coder: NSCoder) {
@@ -44,18 +45,15 @@ class HomeCell: UICollectionViewCell, Providable {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
         
-//        addDropShadow()
-        contentView.layer.masksToBounds = true
+        contentView.layer.masksToBounds = false
         contentView.layer.cornerRadius = cornerRadius
 //        contentView.layer.borderWidth = 1
 
+//        addDropShadow()
         // Specify a shadowPath to improve shadow drawing performance
-//        layer.shadowPath = UIBezierPath(
-//            roundedRect: bounds,
-//            cornerRadius: cornerRadius
-//        ).cgPath
     }
 
 

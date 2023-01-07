@@ -51,16 +51,16 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         homeNavController.tabBarItem = homeTabIcon
         
         
-        // MARK: Profile View Controller
+        // MARK: Account View Controller
         
-        let profileCoordinator = MainCoordinator(viewName: VCNames.PROFILE)
+        let accountCoordinator = MainCoordinator(viewName: VCNames.ACCOUNT)
         
-        let addedIcon = UITabBarItem(title: VCNames.PROFILE, image: UIImage(systemName: "person.fill"), tag: 1)
+        let addedIcon = UITabBarItem(title: VCNames.ACCOUNT, image: UIImage(systemName: "person.fill"), tag: 1)
         
-        guard let profileNavController = profileCoordinator.navigationController else{
+        guard let accountNavController = accountCoordinator.navigationController else{
             return
         }
-        profileNavController.tabBarItem = addedIcon
+        accountNavController.tabBarItem = addedIcon
         
         
         // MARK: Settings View Controller
@@ -75,7 +75,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         settingsNavController.tabBarItem = settingsIcon
         
       
-        self.viewControllers = [homeNavController, profileNavController, settingsNavController].map({ (viewController) in
+        self.viewControllers = [homeNavController, accountNavController, settingsNavController].map({ (viewController) in
             viewController
         })
     }

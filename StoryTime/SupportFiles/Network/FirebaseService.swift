@@ -15,6 +15,7 @@ enum CollectionName : String{
     case user
     case story
     case promptOuput
+    case token
 }
 
 

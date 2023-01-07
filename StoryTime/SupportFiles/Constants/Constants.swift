@@ -24,7 +24,7 @@ struct Dimensions{
 
 //MARK: View Controller Names
 struct VCNames{
-    static let PROFILE = "Profile"
+    static let ACCOUNT = "Account"
     static let HOME = "Home"
     static let SETTINGS = "Settings"
 }

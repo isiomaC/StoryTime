@@ -18,6 +18,15 @@ extension Notification.Name{
 
 
 extension UIView{
+
+    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+         let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+         let mask = CAShapeLayer()
+         mask.frame = self.bounds
+         mask.path = path.cgPath
+         layer.mask = mask
+    }
+
     func addDropShadow(_ cornerRadius: CGFloat = 10){
 
         // Drop Shadows
@@ -36,7 +45,12 @@ extension UIView{
         layer.shadowOpacity = 0.10
 
         // How far the shadow is offset from the UICollectionViewCell’s frame
-        layer.shadowOffset = CGSize(width: 0, height: 5)
+        layer.shadowOffset = CGSize(width: 0, height: 0)
+        
+        layer.shadowPath = UIBezierPath(
+            roundedRect: bounds,
+            cornerRadius: cornerRadius
+        ).cgPath
     }
 }
 

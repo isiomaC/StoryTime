@@ -1,5 +1,5 @@
 //
-//  ProfileViewModel.swift
+//  AccountViewModel.swift
 //  StoryTime
 //
 //  Created by Chuck on 25/11/2022.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ProfileViewModel{
+class AccountViewModel{
     
     var title : ObservableObject<String?> = ObservableObject(nil)
     

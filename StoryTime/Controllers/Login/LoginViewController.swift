@@ -8,9 +8,7 @@
 import Foundation
 import UIKit
 
-class LoginViewController: CoordinatingDelegate {
-    
-    var coordinator: Coordinator?
+class LoginViewController: BaseViewController {
     
     var loginView = LoginView()
     
@@ -82,7 +80,7 @@ extension LoginViewController{
         if email.isEmpty || password.isEmpty {
             showAlert(.error, (title: "Error", message: "Please include valid email or password"))
         }else{
-            
+            startActivityIndicator()
             FirebaseService.shared.auth?.signIn(withEmail: email.trim(), password: password) {[weak self] (data, error) in
                 
                 if let err = error as? NSError {
@@ -94,6 +92,7 @@ extension LoginViewController{
                     UserDefaults.standard.setValue(true, forKey: UserDefaultkeys.isAuthenticated)
                     
                     DispatchQueue.main.async { [weak self] in
+                        self?.startActivityIndicator()
                         self?.dismiss(animated: true)
                         let appDelegate = UIApplication.shared.delegate as? AppDelegate
                         appDelegate?.setRootViewController(TabBarController())

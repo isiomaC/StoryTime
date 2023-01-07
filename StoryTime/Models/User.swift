@@ -40,7 +40,8 @@ extension User{
         guard
             let email = snapShot.data()[User.raw(.email)] as? String,
             let guid = snapShot.data()[User.raw(.guid)] as? String,
-            let timeStamp = snapShot.data()[User.raw(.timestamp)] as? Timestamp
+            let timeStampString = snapShot.data()[User.raw(.timestamp)] as? String,
+            let timeStamp = ISO8601DateFormatter().date(from: timeStampString)
         else{
             return nil
         }
@@ -48,7 +49,7 @@ extension User{
         self.id = snapShot.documentID
         self.email = email
         self.guid = guid
-        self.timestamp = timeStamp.dateValue()
+        self.timestamp = timeStamp
     }
 }
 

@@ -15,6 +15,7 @@ class MyNavigationController: UINavigationController, UINavigationControllerDele
         self.delegate = self
     }
 
+    // MARK: Hides Back Button in Navigation controller
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         let item = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         viewController.navigationItem.backBarButtonItem = item

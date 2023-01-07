@@ -9,9 +9,7 @@ import Foundation
 import UIKit
 import FirebaseFirestore
 
-class SignUpViewController: CoordinatingDelegate{
-    
-    var coordinator: Coordinator?
+class SignUpViewController: BaseViewController{
     
     let signUpView = SignUpView()
     
@@ -78,6 +76,8 @@ extension SignUpViewController {
             showAlert(.error, (title: "Error", message: "Please include valid credentials"))
         }else{
             if (password == password2){
+                startActivityIndicator()
+                
                 FirebaseService.shared.auth?.createUser(withEmail: email.trim(), password: password) { [weak self] (data, error) in
                     
                     guard let strongSelf = self, let userData = data else { return }
@@ -109,10 +109,13 @@ extension SignUpViewController {
                                 
                                 userDto.id = ref.documentID
                                 
-                                DispatchQueue.main.async { [weak self] in
-                                    self?.dismiss(animated: true)
-                                    let appDelegate = UIApplication.shared.delegate as? AppDelegate
-                                    appDelegate?.setRootViewController(TabBarController())
+                                TokenManager.shared.initializeFirstUserToken {
+                                    DispatchQueue.main.async { [weak self] in
+                                        self?.stopActivityIndicator()
+                                        self?.dismiss(animated: true)
+                                        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+                                        appDelegate?.setRootViewController(TabBarController())
+                                    }
                                 }
                             }
                         }

@@ -26,8 +26,8 @@ class MainCoordinator: Coordinator {
             children = [currentChild]
             self.navigationController = MyNavigationController(rootViewController: currentChild)
             break
-        case VCNames.PROFILE:
-            currentChild = ProfileViewController()
+        case VCNames.ACCOUNT:
+            currentChild = AccountViewController()
             children = [currentChild]
             self.navigationController = MyNavigationController(rootViewController: currentChild)
             break

@@ -47,6 +47,17 @@ class HomeViewController: BaseViewController {
         
         NetworkService.shared.delegate = self
         
+        if let userTokenDto = TokenManager.shared.userToken{
+            viewModel.userToken.value = userTokenDto
+        }else{
+            viewModel.fetchToken { [weak self]token, error in
+                guard error == nil, let tk = token else {
+                    return
+                }
+                self?.viewModel.userToken.value = tk
+            }
+        }
+        
         fetchPrompts()
     }
     
@@ -54,6 +65,14 @@ class HomeViewController: BaseViewController {
         viewModel.error.bind { [weak self] errorString in
             if let err = errorString {
                 self?.showAlert(.error, (title: "Error", message: err ))
+            }
+        }
+        
+        viewModel.userToken.bind { tokenDto in
+            if let tk = tokenDto {
+                
+                //MARK: Update Token View Icon amount
+                print(tk)
             }
         }
     }
@@ -79,6 +98,10 @@ class HomeViewController: BaseViewController {
     private func setUpActions(){
         
         homeView.nextBtn.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
+        
+        let buyTokenBarButton = UIBarButtonItem(image: UIImage(systemName: "speaker.wave.3.fill"), style: .plain, target: self, action: #selector(openBuyToken))
+        
+        navigationItem.rightBarButtonItem = buyTokenBarButton
     }
 
 }
@@ -86,6 +109,10 @@ class HomeViewController: BaseViewController {
 
 //MARK: Objc functions
 extension HomeViewController{
+    
+    @objc func openBuyToken(){
+        present(BuyTokenViewController(), animated: true)
+    }
     
     @objc func nextAction(){
 
@@ -102,6 +129,7 @@ extension HomeViewController{
         newPrompt = PromptDTO(id: nil, prompt: newPromptText.trim(), promptOutput: nil)
         
         //MARK: TODO - Call API here to get prompt before showing the page
+        
         if let new = newPrompt, let promptText = new.prompt{
             let mCoordinator = (coordinator as? MainCoordinator)
             mCoordinator?.navigationController?.startActivityIndicator()

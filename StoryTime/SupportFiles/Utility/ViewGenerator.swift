@@ -198,7 +198,14 @@ class ViewGenerator {
     }
     
     static func getImageView(_ props: ImageViewOptions) -> UIImageView {
-        let imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: props.size!.width, height: props.size!.height))
+        let imgView : UIImageView
+        
+        if let size = props.size{
+            imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        }else{
+            imgView = UIImageView()
+        }
+        
         imgView.translatesAutoresizingMaskIntoConstraints = false
         
 //        imgView.layer.cornerRadius = imgView.frame.size.height/2

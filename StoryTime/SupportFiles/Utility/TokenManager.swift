@@ -11,13 +11,34 @@ import StoreKit
 
 let INITIAL_TOKEN_AMOUNT = 1000
 
+struct BuyTokenInfo{
+    var key: String?
+    var description: String
+    var image: UIImage
+}
+
 class TokenManager: NSObject {
     
-    private var product : SKProduct?
+    var products : [SKProduct]?
     
-    private var productId: String = "AiBuddy_001"
+    private var productIds: [String] = ["AiBuddy_001", "AiBuddy_002", "AiBuddy_003"]
+    
+    let buyButtonMap: [BuyButtonTags: String] = [
+        .aiBuddy_001 : "AiBuddy_001",
+        .aiBuddy_002 : "AiBuddy_002",
+        .aiBuddy_003 : "AiBuddy_003",
+    ]
     
     var userToken: TokenDTO?
+    
+
+    static let infoListData: [BuyTokenInfo] = [
+        BuyTokenInfo( description:"Choose a token plan", image: UIImage(systemName: "checkmark.circle")!),
+        BuyTokenInfo(description: "Save countless prompt output", image:UIImage(systemName: "checkmark.circle")!),
+        BuyTokenInfo( description: "Limitless prompts", image: UIImage(systemName: "checkmark.circle")!),
+        BuyTokenInfo( description: "Mobile AI assitant", image: UIImage(systemName: "checkmark.circle")!),
+        BuyTokenInfo( description: "Unlimited Clips for iMessage Extension", image: UIImage(systemName: "checkmark.circle")!),
+    ]
     
     private static var instance : TokenManager!
     static var shared: TokenManager = {
@@ -79,7 +100,7 @@ class TokenManager: NSObject {
         
     }
     
-    private func priceOf(product: SKProduct) -> String {
+    func priceOf(product: SKProduct) -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.formatterBehavior = .behavior10_4
         numberFormatter.numberStyle = .currency
@@ -87,32 +108,9 @@ class TokenManager: NSObject {
         return numberFormatter.string(from: product.price)!
     }
     
-    func getProducts(){
-        let request = SKProductsRequest(productIdentifiers: [productId])
-        request.delegate = self
+    func getProducts(delegate: BuyTokenViewController){
+        let request = SKProductsRequest(productIdentifiers: Set(productIds))
+        request.delegate = delegate
         request.start()
-    }
-    
-}
-
-
-extension TokenManager : SKProductsRequestDelegate{
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        if let mProduct = response.products.first{
-            product = mProduct
-                
-            let price = priceOf(product: mProduct)
-            let subText = "Subscribe for \(price) / month"
-                
-        }
-    }
-    
-    func request(_ request: SKRequest, didFailWithError error: Error) {
-        DispatchQueue.main.async { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            //MARK:- LOCALIZED ERROR SHOWN HERE
-            
-        }
     }
 }

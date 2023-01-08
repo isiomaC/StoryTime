@@ -13,6 +13,13 @@ let AUTHINVALIDPWD = 17009
 let AUTHUNREGISTEREDEMAIL = 17011
 let AUTHBADEMAILFORMAT = 17008
 
+//MARK: Buy Button Tags
+enum BuyButtonTags: Int{
+    case aiBuddy_001 = 1
+    case aiBuddy_002
+    case aiBuddy_003
+}
+
 
 // MARK: Screen Dimensions
 struct Dimensions{

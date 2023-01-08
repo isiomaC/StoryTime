@@ -65,7 +65,7 @@ class SignUpView: BaseView{
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        MyColors.setGradientBackground(view: topArea, top: MyColors.topGradient, bottom: .white)
+        MyColors.setGradientBackground(view: topArea, top: MyColors.topGradient, bottom: .systemBackground)
        
         MyColors.setGradientBackground(view: signupBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
         

@@ -67,7 +67,7 @@ class LoginView: BaseView{
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        MyColors.setGradientBackground(view: topArea, top: MyColors.topGradient, bottom: .white)
+        MyColors.setGradientBackground(view: topArea, top: MyColors.topGradient, bottom: .systemBackground)
         MyColors.setGradientBackground(view: googleBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
         MyColors.setGradientBackground(view: loginBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
         

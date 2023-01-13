@@ -14,7 +14,8 @@ class WritingViewController: BaseViewController{
     
     private lazy var viewModel = WritingViewModel()
     
-
+    var userToken = TokenManager.shared.userToken
+    
     init(promptDto: PromptDTO){
         
         super.init(nibName: nil, bundle: nil)
@@ -64,7 +65,6 @@ class WritingViewController: BaseViewController{
         
 //        viewModel.options.value = selectedOptions
     }
-    
     
     private func setUpBinders() {
         
@@ -117,14 +117,25 @@ class WritingViewController: BaseViewController{
 extension WritingViewController {
     
     @objc func triggerPrompt(){
-        guard let text = writingView.promptField.text else {
+        
+        guard let text = writingView.promptField.text,
+            let token = userToken, let tkAmount = token.amount else {
             return
         }
         
-        if !text.isReallyEmpty{
-            let mCoordinator = (coordinator as? MainCoordinator)
-            mCoordinator?.navigationController?.startActivityIndicator()
-            viewModel.triggerPrompt(text)
+        if tkAmount > text.split(separator: " ").count{
+            
+            if !text.isReallyEmpty{
+                let mCoordinator = (coordinator as? MainCoordinator)
+                mCoordinator?.navigationController?.startActivityIndicator()
+                viewModel.triggerPrompt(text)
+            }
+        } else {
+            
+            let animationDuration = 0.3
+            let showDuration: Double = 5
+            
+            writingView.showOutOfToken(showDuration, animationDuration)
         }
     }
     
@@ -177,17 +188,37 @@ extension WritingViewController {
 
 extension WritingViewController: NetworkServiceDelegate  {
     func success(_ network: NetworkService, output: PromptOutputDTO) {
-        DispatchQueue.main.async { [weak self] in
-            let mCoordinator = (self?.coordinator as? MainCoordinator)
-            mCoordinator?.navigationController?.stopActivityIndicator()
-            
-            // Update TextView to display output
-            self?.viewModel.outputText.value = output.choices.first?.text
-            
-            //Capture output incase it changes
-            self?.viewModel.currentPrompt?.promptOutput = output
-            self?.viewModel.currentPrompt?.outputText = output.choices.first?.text
+        
+        guard let outputText = output.choices.first?.text, let uTkAmount = userToken?.amount,
+                let token = userToken else {
+            return
         }
+        
+        
+        TokenManager.shared.updateTokenUsage(outputText: outputText, tokenAmount: uTkAmount, token: token) { result in
+            switch result{
+            case .success(_):
+
+                DispatchQueue.main.async { [weak self] in
+                    let mCoordinator = (self?.coordinator as? MainCoordinator)
+                    mCoordinator?.navigationController?.stopActivityIndicator()
+                    
+                    // Update TextView to display output
+                    self?.viewModel.outputText.value = output.choices.first?.text
+                    
+                    //Capture output incase it changes
+                    self?.viewModel.currentPrompt?.promptOutput = output
+                    self?.viewModel.currentPrompt?.outputText = output.choices.first?.text
+
+                }
+                break
+            case .failure(_):
+                print("Error updating token")
+                break
+            }
+        }
+        
+
     }
     
     func failure(error: Error?) {

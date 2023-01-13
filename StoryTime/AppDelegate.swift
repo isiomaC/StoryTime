@@ -25,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func startWindow(){
         
-        //MARK: Remove - for testing
-//        UserDefaults.standard.set(false, forKey: UserDefaultkeys.hasLaunched)
+        //MARK: Remove - for testing ‼️‼️‼️‼️‼️‼️
+//        UserDefaults.standard.set(false, forKey: UserDefaultkeys.hasLaunched) 
         
         window = UIWindow(frame: Dimensions.SCREENSIZE)
         

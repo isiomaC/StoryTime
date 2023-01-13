@@ -50,10 +50,11 @@ class HomeViewController: BaseViewController {
         if let userTokenDto = TokenManager.shared.userToken{
             viewModel.userToken.value = userTokenDto
         }else{
-            viewModel.fetchToken { [weak self]token, error in
+            viewModel.fetchToken { [weak self] token, error in
                 guard error == nil, let tk = token else {
                     return
                 }
+                TokenManager.shared.userToken = tk
                 self?.viewModel.userToken.value = tk
             }
         }
@@ -99,11 +100,23 @@ class HomeViewController: BaseViewController {
         
         homeView.nextBtn.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
         
-        let buyTokenBarButton = UIBarButtonItem(image: UIImage(systemName: "speaker.wave.3.fill"), style: .plain, target: self, action: #selector(openBuyToken))
-        
-        navigationItem.rightBarButtonItem = buyTokenBarButton
+        if #available(iOS 16.0, *) {
+            let customView = UIView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+            customView.backgroundColor = .red
+            let btn = UIBarButtonItem(customView: customView)
+            let buyTokenBarButton = UIBarButtonItem(title: "My title", image: UIImage(systemName: "speaker.wave.3.fill"), target: self, action: #selector(openBuyToken))
+            
+            navigationItem.rightBarButtonItems = [btn, buyTokenBarButton]
+        } else {
+            // Fallback on earlier versions
+            let customView = UIView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+            customView.backgroundColor = .red
+            let btn = UIBarButtonItem(customView: customView)
+            let buyTokenBarButton = UIBarButtonItem(image: UIImage(systemName: "speaker.wave.3.fill"), style: .plain, target: self, action: #selector(openBuyToken))
+            
+            navigationItem.rightBarButtonItems = [btn, buyTokenBarButton]
+        }
     }
-
 }
 
 
@@ -116,24 +129,46 @@ extension HomeViewController{
     
     @objc func nextAction(){
 
-        guard let newPromptText = homeView.inputField.text else {
+        guard var newPromptText = homeView.inputField.text,
+              var userToken = viewModel.userToken.value else {
             return
         }
-
-        // Required for Prompts
+        
+        newPromptText = newPromptText.trim()
+        
+        //Text   Required for Prompts
         if newPromptText.isReallyEmpty {
             showAlert(.error, (title: "Error", message: "Please fill in prompt field"))
             return
         }
 
-        newPrompt = PromptDTO(id: nil, prompt: newPromptText.trim(), promptOutput: nil)
-        
-        //MARK: TODO - Call API here to get prompt before showing the page
-        
-        if let new = newPrompt, let promptText = new.prompt{
-            let mCoordinator = (coordinator as? MainCoordinator)
-            mCoordinator?.navigationController?.startActivityIndicator()
-            viewModel.triggerPrompt(promptText)
+        let wordCount = newPromptText.split(separator: " ").count
+
+        if var userTokenAmount = userToken.amount {
+
+            if userTokenAmount > wordCount {
+
+                userTokenAmount = userTokenAmount - wordCount
+
+                userToken.amount = userTokenAmount
+
+                viewModel.userToken.value = userToken
+
+                // proceed to prompt after update
+                newPrompt = PromptDTO(id: nil, prompt: newPromptText, promptOutput: nil)
+
+                //MARK: TODO - Prefetch from API here to get prompt before showing the page
+                if let new = newPrompt, let promptText = new.prompt{
+                    let mCoordinator = (coordinator as? MainCoordinator)
+                    mCoordinator?.navigationController?.startActivityIndicator()
+                    viewModel.triggerPrompt(promptText)
+                }
+
+            }else{
+
+                //MARK: - Not enough tokens - show modal with button to show BuyTokenViewController
+                showAlert(.info, (title: "Not Enough Tokens", message: "Please buy some more tokens to continue"))
+            }
         }
     }
 
@@ -151,19 +186,51 @@ extension HomeViewController: NetworkServiceDelegate {
     func success(_ network: NetworkService, output: PromptOutputDTO) {
         
 //        let outputText = (newPrompt?.prompt)! + " \n " +
-        guard let firstOutput = output.choices.first else {
+        guard let firstOutput = output.choices.first,
+              let token = viewModel.userToken.value,
+              let uTkAmount = token.amount else {
             return
         }
         
         newPrompt?.outputText = firstOutput.text
         newPrompt?.promptOutput = output
         
-        DispatchQueue.main.async { [weak self] in
-            let mCoordinator = (self?.coordinator as? MainCoordinator)
-            mCoordinator?.navigationController?.stopActivityIndicator()
-            mCoordinator?.push(WritingViewController(promptDto: (self?.newPrompt)!))
+        TokenManager.shared.updateTokenUsage(outputText: firstOutput.text, tokenAmount: uTkAmount, token: token) { [weak self] result in
+            switch result{
+            case .success(let tk):
+                
+                self?.viewModel.userToken.value = tk
+                
+                DispatchQueue.main.async { [weak self] in
+                    let mCoordinator = (self?.coordinator as? MainCoordinator)
+                    mCoordinator?.navigationController?.stopActivityIndicator()
+                    mCoordinator?.push(WritingViewController(promptDto: (self?.newPrompt)!))
+                }
+                break
+            case .failure(_):
+                print("Error updating token")
+                break
+            }
         }
         
+//        let outputTextCount = firstOutput.text.split(separator: " ").count
+//
+//        uTkAmount = uTkAmount - outputTextCount
+//
+//        token.amount = uTkAmount
+//
+//        TokenManager.shared.userToken = token
+//        viewModel.userToken.value = token
+//
+//        FirebaseService.shared.updateDocument(.token, query: ["userId" : userId], data: ["amount" : uTkAmount]) { [weak self] error in
+//
+//            guard error == nil else {
+//                print("error updating token")
+//                return
+//            }
+//
+//
+//        }
     }
     
     func failure(error: Error?) {

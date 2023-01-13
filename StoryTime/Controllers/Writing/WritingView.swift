@@ -23,6 +23,8 @@ class WritingView: BaseView {
     
     lazy var promptField = ViewGenerator.getTextField(TextFieldOptions(placeholder: "Enter prompt*", fontStyle: AppFonts.body))
 
+    lazy var outOfTokenView = UIView(frame: CGRect(x: 0, y: 0, width: Dimensions.SCREENSIZE.width, height: 20))
+    lazy var outOFTokenText = ViewGenerator.getLabel(LabelOptions(text: "out of tokens", color: .black, fontStyle: AppFonts.Italic(.body)))
     
     override func layoutSubviews(){
         super.layoutSubviews()
@@ -34,17 +36,31 @@ class WritingView: BaseView {
         MyColors.setGradientBackground(view: outputField, top: MyColors.topGradient, bottom: .white)
         
         outputField.layer.cornerRadius = 20
+        outOfTokenView.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 20)
         
         promptField.layer.borderColor = MyColors.primary.cgColor
         promptField.layer.borderWidth = CGFloat(1)
         promptField.setLeftPaddingPoints(5)
         promptField.setRightPaddingPoints(5)
         
+        outOfTokenView.isHidden = true
+        
         wordCount.textAlignment = .right
     }
     
     func setWordCount(_ count: Int){
         wordCount.text = "\(count) words"
+    }
+    
+    func showOutOfToken(_ showDuration: Double, _ animationDuration: Double){
+        UIView.animate(withDuration: animationDuration) { [weak self] in
+            self?.outOfTokenView.isHidden = false
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + showDuration) {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.outOfTokenView.isHidden = true
+            }
+        }
     }
     
     override func setUpViews() {
@@ -56,14 +72,31 @@ class WritingView: BaseView {
         addSubview(iconBtn)
         
         
+        addSubview(outOfTokenView)
+        outOfTokenView.addSubview(outOFTokenText)
+        
+        
         addSubview(wordCount)
         addSubview(promptField)
         
         triggerConstraints()
+        
+        outOfTokenView.backgroundColor = MyColors.hexStringToUIColor(hex: "FCF5E8")
+        
     }
     
     private func triggerConstraints(){
         
+        outOfTokenView.translatesAutoresizingMaskIntoConstraints = false
+        outOfTokenView.bottomAnchor.constraint(equalTo: outputField.bottomAnchor).isActive = true
+        outOfTokenView.widthAnchor.constraint(equalTo: outputField.widthAnchor).isActive = true
+        outOfTokenView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        outOfTokenView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        
+        outOFTokenText.centerXAnchor.constraint(equalTo: outOfTokenView.centerXAnchor).isActive = true
+        outOFTokenText.centerYAnchor.constraint(equalTo: outOfTokenView.centerYAnchor).isActive = true
+        
+        // Output field
         outputField.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 0.6).isActive = true
         outputField.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         outputField.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -92,6 +125,7 @@ class WritingView: BaseView {
         saveBtn.leadingAnchor.constraint(equalTo: centerXAnchor, constant: 5).isActive = true
        
         
+        // Share Button
         iconBtn.topAnchor.constraint(equalTo: promptField.bottomAnchor, constant: 20).isActive = true
         iconBtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.15).isActive = true
         iconBtn.heightAnchor.constraint(equalToConstant: 45).isActive = true

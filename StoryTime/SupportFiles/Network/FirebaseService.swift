@@ -200,7 +200,7 @@ class FirebaseService {
     
     
     // MARK: Update Document Section
-    func updateDocument(_ collectionName: CollectionName, query: [String: Any], data: [String: Any]){
+    func updateDocument(_ collectionName: CollectionName, query: [String: Any], data: [String: Any], completion: @escaping (Error?) -> Void){
         
         let collection = collectionName.rawValue
         
@@ -209,9 +209,13 @@ class FirebaseService {
         let firebaseQuery: Query? = updateFireQuery(query, collectionRef: collectionRef)
         
         firebaseQuery?.getDocuments(completion: { (querySnapShot, error) in
-            guard error == nil else { return }
+            guard error == nil else {
+                completion(error)
+                return
+            }
             let document = querySnapShot?.documents.first
             document?.reference.updateData(data)
+            completion(nil)
         })
     }
     

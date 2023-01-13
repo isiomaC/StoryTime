@@ -25,11 +25,6 @@ class BuyTokenView: BaseView{
     
     override func setUpViews() {
         
-        // MARK: Remove - Testing
-//        topArea.backgroundColor = .systemPink
-//        
-//        infoList.backgroundColor = .blue
-//
         backgroundColor = .systemBackground
         
         addSubview(topArea)

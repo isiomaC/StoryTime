@@ -96,8 +96,33 @@ class TokenManager: NSObject {
     }
     
     
-    func updateToken(){
+    func updateTokenUsage(outputText: String, tokenAmount: Int, token: TokenDTO, completion: @escaping(Result<TokenDTO, Error>) -> Void){
         
+        guard let userId = userToken?.userId else {
+            return
+        }
+        
+        let outputTextCount = outputText.split(separator: " ").count
+        
+        var mToken = token
+        var uTkAmount = tokenAmount
+        
+        uTkAmount = uTkAmount - outputTextCount
+        
+        mToken.amount = uTkAmount
+        
+        userToken = mToken
+    
+        FirebaseService.shared.updateDocument(.token, query: ["userId" : userId], data: ["amount" : uTkAmount]) { [weak self] error in
+            
+            guard error == nil, let tk = self?.userToken else {
+                print("error updating token")
+                completion(.failure(error!))
+                return
+            }
+            
+            completion(.success(tk))
+        }
     }
     
     func priceOf(product: SKProduct) -> String {

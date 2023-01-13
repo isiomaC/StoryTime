@@ -96,10 +96,6 @@ extension BuyTokenViewController {
             print("defaut")
             break
         }
-        
-       
-        
-        
 
     }
     
@@ -243,12 +239,24 @@ extension BuyTokenViewController : SKProductsRequestDelegate{
         
         TokenManager.shared.products = response.products
         
-        print(TokenManager.shared.products)
+        let getProduct : (BuyButtonTags) -> SKProduct = { key in
+            let product = response.products.first { prod in
+                return prod.productIdentifier == TokenManager.shared.buyButtonMap[key]
+            }
+            
+            return product ?? SKProduct()
+        }
+        
+        let product001 = getProduct(.aiBuddy_001)
+        let product002 = getProduct(.aiBuddy_002)
+        let product003 = getProduct(.aiBuddy_003)
             
         DispatchQueue.main.async { [weak self] in
             
            //MARK: Update button UI to show price/amount of tokens
-            
+            self?.buyTokenView.button_199.setTitle("\(TokenManager.shared.priceOf(product: product001)) / \(aiBuddy_001_AMOUNT) tokens", for: .normal)
+            self?.buyTokenView.button_299.setTitle("\(TokenManager.shared.priceOf(product: product002)) / \(aiBuddy_002_AMOUNT) tokens", for: .normal)
+            self?.buyTokenView.button_399.setTitle("\(TokenManager.shared.priceOf(product: product003)) / \(aiBuddy_003_AMOUNT) tokens", for: .normal)
         }
     }
     

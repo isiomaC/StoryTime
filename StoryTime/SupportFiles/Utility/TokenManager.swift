@@ -11,6 +11,10 @@ import StoreKit
 
 let INITIAL_TOKEN_AMOUNT = 1000
 
+let aiBuddy_001_AMOUNT = 2000
+let aiBuddy_002_AMOUNT = 5000
+let aiBuddy_003_AMOUNT = 10000
+
 struct BuyTokenInfo{
     var key: String?
     var description: String
@@ -34,7 +38,7 @@ class TokenManager: NSObject {
 
     static let infoListData: [BuyTokenInfo] = [
         BuyTokenInfo( description:"Choose a token plan", image: UIImage(systemName: "checkmark.circle")!),
-        BuyTokenInfo(description: "Save countless prompt output", image:UIImage(systemName: "checkmark.circle")!),
+        BuyTokenInfo( description: "Save countless prompt output", image:UIImage(systemName: "checkmark.circle")!),
         BuyTokenInfo( description: "Limitless prompts", image: UIImage(systemName: "checkmark.circle")!),
         BuyTokenInfo( description: "Mobile AI assitant", image: UIImage(systemName: "checkmark.circle")!),
         BuyTokenInfo( description: "Unlimited Clips for iMessage Extension", image: UIImage(systemName: "checkmark.circle")!),

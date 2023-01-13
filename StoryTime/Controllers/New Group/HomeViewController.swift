@@ -100,22 +100,14 @@ class HomeViewController: BaseViewController {
         
         homeView.nextBtn.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
         
-        if #available(iOS 16.0, *) {
-            let customView = UIView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
-            customView.backgroundColor = .red
-            let btn = UIBarButtonItem(customView: customView)
-            let buyTokenBarButton = UIBarButtonItem(title: "My title", image: UIImage(systemName: "speaker.wave.3.fill"), target: self, action: #selector(openBuyToken))
-            
-            navigationItem.rightBarButtonItems = [btn, buyTokenBarButton]
-        } else {
-            // Fallback on earlier versions
-            let customView = UIView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
-            customView.backgroundColor = .red
-            let btn = UIBarButtonItem(customView: customView)
-            let buyTokenBarButton = UIBarButtonItem(image: UIImage(systemName: "speaker.wave.3.fill"), style: .plain, target: self, action: #selector(openBuyToken))
-            
-            navigationItem.rightBarButtonItems = [btn, buyTokenBarButton]
-        }
+        // Fallback on earlier versions
+        let customView = UIImageView(image: UIImage(systemName: "rosette"))
+        customView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        let btn = UIBarButtonItem(customView: customView)
+        btn.customView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openBuyToken)))
+        
+        navigationItem.rightBarButtonItems = [btn]
+
     }
 }
 

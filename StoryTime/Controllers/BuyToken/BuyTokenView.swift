@@ -17,9 +17,9 @@ class BuyTokenView: BaseView{
     lazy var title = ViewGenerator.getLabel(LabelOptions(text: "Choose a plan", color: .label, fontStyle: AppFonts.title))
     lazy var iconImage = ViewGenerator.getImageView(ImageViewOptions(image: UIImage(named: "myIcon")!, size: (100, 100)))
     
-    lazy var button_199 = ViewGenerator.getGradientButton(ButtonOptions(title: "$1.99", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
-    lazy var button_299 = ViewGenerator.getGradientButton(ButtonOptions(title: "$2.99", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
-    lazy var button_399 = ViewGenerator.getGradientButton(ButtonOptions(title: "$3.99", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
+    lazy var button_199 = ViewGenerator.getGradientButton(ButtonOptions(title: "", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
+    lazy var button_299 = ViewGenerator.getGradientButton(ButtonOptions(title: "", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
+    lazy var button_399 = ViewGenerator.getGradientButton(ButtonOptions(title: "", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
     
     lazy var infoList = UITableView(frame: CGRect.zero, style: .plain)
     

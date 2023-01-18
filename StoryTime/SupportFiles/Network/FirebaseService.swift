@@ -74,9 +74,41 @@ class FirebaseService {
         return auth!.currentUser!.uid
     }
     
+    func getUserEmail() -> String{
+        guard let email = auth?.currentUser?.email else {
+            return ""
+        }
+        return email
+    }
     
+    func reAuthenticate(creds: (email:String, pwd: String), completion: @escaping (Error?) -> Void){
+        if let user = auth?.currentUser {
+
+            let authCredentials = EmailAuthProvider.credential(withEmail: creds.email, password: creds.pwd)
+            
+            user.reauthenticate(with: authCredentials){ authDataResult, error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                
+                completion(nil)
+            }
+        }
+    }
     
-    
+    func updatePasssword(password: String, completion: @escaping (Error?) -> Void){
+        if let user = auth?.currentUser {
+            user.updatePassword(to: password) { error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                completion(nil)
+            }
+        }
+    }
+
     // MARK: Get Document Section
     
     func getById(_ collectionName: CollectionName, id: String, completion: @escaping DocumentSnapshotHandler ){

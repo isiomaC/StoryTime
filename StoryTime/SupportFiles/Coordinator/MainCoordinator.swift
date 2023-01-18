@@ -26,11 +26,11 @@ class MainCoordinator: Coordinator {
             children = [currentChild]
             self.navigationController = MyNavigationController(rootViewController: currentChild)
             break
-        case VCNames.ACCOUNT:
-            currentChild = AccountViewController()
-            children = [currentChild]
-            self.navigationController = MyNavigationController(rootViewController: currentChild)
-            break
+//        case VCNames.ACCOUNT:
+//            currentChild = AccountViewController()
+//            children = [currentChild]
+//            self.navigationController = MyNavigationController(rootViewController: currentChild)
+//            break
         case VCNames.SETTINGS:
             currentChild = SettingsViewController()
             children = [currentChild]
@@ -66,14 +66,13 @@ class MainCoordinator: Coordinator {
         return scrollView
     }
     
-    
     //MARK: Helper funcs
     func toggleNavDisplay(hidden: Bool){
         navigationController?.navigationBar.isHidden = hidden
     }
 
     // MARK: Presentation Functions (Prsent, Push, Pop)
-    func present(_ currentVC: CoordinatingDelegate, _ nextVC: CoordinatingDelegate, presentation: UIModalPresentationStyle = .automatic) {
+    func present(_ currentVC: CoordinatingDelegate, _ nextVC: CoordinatingDelegate, wrapNav: Bool = false, presentation: UIModalPresentationStyle = .automatic) {
         
         let index = children?.firstIndex(where: { child in
             if let castedChild = child as? CoordinatingDelegate{
@@ -90,10 +89,20 @@ class MainCoordinator: Coordinator {
             children?.append(currentVC)
         }
             
-        currentChild?.coordinator = self
         currentChild = currentVC
-        nextVC.modalPresentationStyle = presentation
-        currentVC.present(nextVC, animated: true, completion: nil)
+        currentChild?.coordinator = self
+        
+        var newVc = nextVC
+        newVc.coordinator = self
+        newVc.modalPresentationStyle = presentation
+        
+        if wrapNav {
+            let navWrappedVC = UINavigationController(rootViewController: newVc)
+            currentVC.present(navWrappedVC, animated: true, completion: nil)
+            return
+        }
+        
+        currentVC.present(newVc, animated: true, completion: nil)
     }
     
     func push(_ viewController: CoordinatingDelegate) {

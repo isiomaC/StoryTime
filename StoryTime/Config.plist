@@ -2,11 +2,23 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>APP_NAME</key>
+	<string>AiBuddy</string>
+	<key>PRIVACY_POLICY</key>
+	<string>link_to_policy</string>
+	<key>TERMS_EULA</key>
+	<string>https://www.apple.com/legal/internet-services/itunes/dev/stdeula/</string>
+	<key>APP_STORE_URL</key>
+	<string>https://apps.apple.com/us/app/aibuddy/id1662232261</string>
+	<key>WEB_ROUTE</key>
+	<string>link_to_website</string>
 	<key>SHARED_SECRET</key>
 	<string>todoCreate</string>
 	<key>BASE_API_URL</key>
 	<string>https://us-central1-storytime-b6181.cloudfunctions.net/webApi</string>
 	<key>VERSION</key>
 	<string>v1</string>
+	<key>APP_ID</key>
+	<string>1662232261</string>
 </dict>
 </plist>

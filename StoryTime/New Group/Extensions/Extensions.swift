@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import StoreKit
 
 
 // MARK: Notification.Name
@@ -134,6 +135,18 @@ extension UITextField {
         bottomLine.backgroundColor = color.cgColor
         borderStyle = UITextField.BorderStyle.none
         layer.addSublayer(bottomLine)
+    }
+    
+    func addRightIcon(image: UIImage) {
+        self.rightViewMode = .always
+       
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+       
+        imageView.image = image
+        
+        imageView.tintColor = .lightGray
+        
+        self.rightView = imageView
     }
 }
 
@@ -319,3 +332,17 @@ extension Date {
 
 
 //MARK: UILabel
+
+
+
+
+
+
+//MARK: SKStoreReviewController
+extension SKStoreReviewController {
+    public static func requestReviewInCurrentScene() {
+        if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+            requestReview(in: scene)
+        }
+    }
+}

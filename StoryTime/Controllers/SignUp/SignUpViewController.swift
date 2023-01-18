@@ -72,10 +72,10 @@ extension SignUpViewController {
             return
         }
         
-        if email == "" || password == "" || password2 == ""{
+        if email.isReallyEmpty || password.isReallyEmpty || password2.isReallyEmpty {
             showAlert(.error, (title: "Error", message: "Please include valid credentials"))
         }else{
-            if (password == password2){
+            if password == password2 {
                 startActivityIndicator()
                 
                 FirebaseService.shared.auth?.createUser(withEmail: email.trim(), password: password) { [weak self] (data, error) in

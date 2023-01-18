@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		131295EE2976202700E903B1 /* SettingsOptsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131295ED2976202700E903B1 /* SettingsOptsDTO.swift */; };
 		131F07D12960EDEE00C93390 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131F07D02960EDEE00C93390 /* Token.swift */; };
 		131F07D32960EE6400C93390 /* TokenDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131F07D22960EE6400C93390 /* TokenDTO.swift */; };
 		133ABEA5292E8249000A2D96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEA4292E8249000A2D96 /* AppDelegate.swift */; };
@@ -27,7 +28,7 @@
 		133ABEFD292F8A03000A2D96 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEFC292F8A03000A2D96 /* FirebaseService.swift */; };
 		133ABF04292F8B90000A2D96 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF03292F8B90000A2D96 /* Home.swift */; };
 		133ABF07292F8D17000A2D96 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF06292F8D17000A2D96 /* TabBarController.swift */; };
-		133ABF0A292F8E06000A2D96 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF09292F8E06000A2D96 /* AccountViewController.swift */; };
+		133ABF0A292F8E06000A2D96 /* PasswordResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF09292F8E06000A2D96 /* PasswordResetViewController.swift */; };
 		133ABF0D292F8EB0000A2D96 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF0C292F8EB0000A2D96 /* Coordinator.swift */; };
 		133ABF0F292F8EBE000A2D96 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF0E292F8EBD000A2D96 /* MainCoordinator.swift */; };
 		133ABF11292F940C000A2D96 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABF10292F940C000A2D96 /* Font.swift */; };
@@ -73,7 +74,7 @@
 		13B04F122933B0B4007E7637 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13B04F112933B0B4007E7637 /* Config.plist */; };
 		13B04F142933B11E007E7637 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04F132933B11E007E7637 /* Utils.swift */; };
 		13B04F172933B5A1007E7637 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 13B04F162933B5A1007E7637 /* SwiftyJSON */; };
-		13B04F1D29354F91007E7637 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04F1C29354F91007E7637 /* AccountView.swift */; };
+		13B04F1D29354F91007E7637 /* PwdResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04F1C29354F91007E7637 /* PwdResetView.swift */; };
 		13B04F1F2936166F007E7637 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04F1E2936166F007E7637 /* SettingView.swift */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +96,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		131295ED2976202700E903B1 /* SettingsOptsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOptsDTO.swift; sourceTree = "<group>"; };
 		131F07D02960EDEE00C93390 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		131F07D22960EE6400C93390 /* TokenDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDTO.swift; sourceTree = "<group>"; };
 		133ABEA1292E8249000A2D96 /* StoryTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,7 +121,7 @@
 		133ABEFC292F8A03000A2D96 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		133ABF03292F8B90000A2D96 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		133ABF06292F8D17000A2D96 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		133ABF09292F8E06000A2D96 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		133ABF09292F8E06000A2D96 /* PasswordResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewController.swift; sourceTree = "<group>"; };
 		133ABF0C292F8EB0000A2D96 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		133ABF0E292F8EBD000A2D96 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		133ABF10292F940C000A2D96 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -159,7 +161,7 @@
 		13B04F0F2933AE8A007E7637 /* Prompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prompt.swift; sourceTree = "<group>"; };
 		13B04F112933B0B4007E7637 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		13B04F132933B11E007E7637 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		13B04F1C29354F91007E7637 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		13B04F1C29354F91007E7637 /* PwdResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwdResetView.swift; sourceTree = "<group>"; };
 		13B04F1E2936166F007E7637 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -316,7 +318,7 @@
 				13B04EE72932EE94007E7637 /* Settings */,
 				13B04EE62932EE7A007E7637 /* Writing */,
 				133ABF1B29309D62000A2D96 /* OnBoarding */,
-				133ABF08292F8DEE000A2D96 /* Account */,
+				133ABF08292F8DEE000A2D96 /* PasswordReset */,
 				133ABF05292F8C62000A2D96 /* Home */,
 				133ABF06292F8D17000A2D96 /* TabBarController.swift */,
 				133ABF2029309F79000A2D96 /* BaseView.swift */,
@@ -348,13 +350,13 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
-		133ABF08292F8DEE000A2D96 /* Account */ = {
+		133ABF08292F8DEE000A2D96 /* PasswordReset */ = {
 			isa = PBXGroup;
 			children = (
-				133ABF09292F8E06000A2D96 /* AccountViewController.swift */,
-				13B04F1C29354F91007E7637 /* AccountView.swift */,
+				133ABF09292F8E06000A2D96 /* PasswordResetViewController.swift */,
+				13B04F1C29354F91007E7637 /* PwdResetView.swift */,
 			);
-			path = Account;
+			path = PasswordReset;
 			sourceTree = "<group>";
 		};
 		133ABF0B292F8E66000A2D96 /* Coordinator */ = {
@@ -409,6 +411,7 @@
 		138DC89E293A3C74002522B4 /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				131295ED2976202700E903B1 /* SettingsOptsDTO.swift */,
 				138DC89F293A3C8F002522B4 /* PromptDTO.swift */,
 				131F07D22960EE6400C93390 /* TokenDTO.swift */,
 			);
@@ -609,13 +612,14 @@
 				13B04EF12933013C007E7637 /* BaseViewController.swift in Sources */,
 				13B04EED2932F876007E7637 /* WritingView.swift in Sources */,
 				13B04F142933B11E007E7637 /* Utils.swift in Sources */,
+				131295EE2976202700E903B1 /* SettingsOptsDTO.swift in Sources */,
 				13B04EEF2932F885007E7637 /* WritingViewModel.swift in Sources */,
 				133ABF07292F8D17000A2D96 /* TabBarController.swift in Sources */,
 				133ABF0D292F8EB0000A2D96 /* Coordinator.swift in Sources */,
 				13B04EE92932EED8007E7637 /* SettingsViewController.swift in Sources */,
 				133ABEFB292F88BD000A2D96 /* HomeViewModel.swift in Sources */,
 				133ABEA9292E8249000A2D96 /* HomeViewController.swift in Sources */,
-				133ABF0A292F8E06000A2D96 /* AccountViewController.swift in Sources */,
+				133ABF0A292F8E06000A2D96 /* PasswordResetViewController.swift in Sources */,
 				133ABF232930A05F000A2D96 /* ViewGenerator.swift in Sources */,
 				133ABEA5292E8249000A2D96 /* AppDelegate.swift in Sources */,
 				133ABF1D29309D9B000A2D96 /* OnBoardingViewController.swift in Sources */,
@@ -644,7 +648,7 @@
 				133ABF2129309F79000A2D96 /* BaseView.swift in Sources */,
 				133ABF2A2930A3E5000A2D96 /* TextFieldPasteDisabled.swift in Sources */,
 				133ABF04292F8B90000A2D96 /* Home.swift in Sources */,
-				13B04F1D29354F91007E7637 /* AccountView.swift in Sources */,
+				13B04F1D29354F91007E7637 /* PwdResetView.swift in Sources */,
 				133ABEF3292F58E1000A2D96 /* ObservableObject.swift in Sources */,
 				13B04F01293345B8007E7637 /* SignUpView.swift in Sources */,
 				13B04EFF29334595007E7637 /* LoginView.swift in Sources */,

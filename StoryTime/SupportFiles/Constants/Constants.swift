@@ -105,3 +105,22 @@ struct AppFonts {
     }
 
 }
+
+
+//Constants
+struct SettingsConstants {
+    //settings
+    static let email = "Email"
+    static let changePwd = "Change Password"
+    static let tokens = "Tokens"
+    
+    //Info
+    static let shareWithFriend = "Share with a friend"
+    static let rateUs = "Leave a review"
+    static let termsUse = "Terms of use"
+    static let privacyPolicy = "Privacy policy"
+    
+    //Account
+    static let logOut = "Log Out"
+    static let deleteAccount = "Delete Account"
+}

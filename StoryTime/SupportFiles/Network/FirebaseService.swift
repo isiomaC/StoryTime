@@ -81,6 +81,56 @@ class FirebaseService {
         return email
     }
     
+    func deleteUser(completion: @escaping (Error?) -> Void){
+        guard let user = auth?.currentUser else {
+            return
+        }
+        
+        print(user.uid)
+        
+        // Query and delete User.guid == user.uid from Firestore
+        getDocuments(.user, query: ["guid": user.uid]){ [weak self] documentSnapShot, error in
+            guard let snapShot = documentSnapShot, error == nil else {
+                return
+            }
+            
+            for shot in snapShot{
+                self?.deleteDocument(.user, docId: shot.reference.documentID)
+            }
+            
+            // Query and delete Token.userId == user.uid from Firestore
+            self?.getDocuments(.token, query: ["userId": user.uid]){ [weak self] documentSnapShot, error in
+                guard let snapShot = documentSnapShot, error == nil else {
+                    return
+                }
+                
+                for shot in snapShot{
+                    self?.deleteDocument(.token, docId: shot.reference.documentID)
+                }
+                
+                // Query and delete PromptOuput.userId == user.uid from Firestore
+                self?.getDocuments(.promptOuput, query: ["userId": user.uid]){ [weak self] documentSnapShot, error in
+                    guard let snapShot = documentSnapShot, error == nil else {
+                        return
+                    }
+                    
+                    for shot in snapShot{
+                        self?.deleteDocument(.promptOuput, docId: shot.reference.documentID)
+                    }
+                    
+                    // Delete FireAuth user
+                    user.delete { error in
+                      if let error = error {
+                          completion(error)
+                      } else {
+                          completion(nil)
+                      }
+                    }
+                }
+            }
+        }
+    }
+    
     func reAuthenticate(creds: (email:String, pwd: String), completion: @escaping (Error?) -> Void){
         if let user = auth?.currentUser {
 

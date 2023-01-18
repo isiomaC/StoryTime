@@ -219,10 +219,26 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             
             let option = deleteOptions[indexPath.row]
             
-            if option.name == SettingsConstants.deleteAccount{
+            if option.name == SettingsConstants.deleteAccount {
               
-                // TODO: Implement Delete Account feature
-                print("destructive delete")
+                let credentialPopUp = UIAlertController(title: "Are you sure ?", message: "This cannot be undone", preferredStyle: .alert)
+                
+                let yesAction = UIAlertAction(title: "Yes", style: .destructive){ action in
+                    
+                    FirebaseService.shared.deleteUser { [weak self] error in
+                        guard error == nil else { return }
+                        
+                        self?.logOut()
+                    }
+                }
+                
+                let noAction = UIAlertAction(title: "No", style: .default) { (action) in
+                    credentialPopUp.dismiss(animated: true, completion: nil)
+                }
+                
+                credentialPopUp.addAction(yesAction)
+                credentialPopUp.addAction(noAction)
+                present(credentialPopUp, animated: true, completion: nil)
             }
         }
     }

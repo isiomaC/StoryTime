@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class HomeViewController: BaseViewController {
     
@@ -16,7 +17,7 @@ class HomeViewController: BaseViewController {
     var homeView = HomeView()
     
     var newPrompt: PromptDTO?
-
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -35,12 +36,12 @@ class HomeViewController: BaseViewController {
         
         viewModel.coordinator = coordinator
         
-//        viewModel.add([PromptDTO(id: "tes2", prompt: "test String2 test String test String test String test String  test String test String", promptOutput: nil)])
-        
-//        fetchPrompts()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchMorePaginated), name: .fetchMore, object: nil)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .fetchMore, object: nil)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -61,6 +62,7 @@ class HomeViewController: BaseViewController {
         
         fetchPrompts()
     }
+
     
     private func setUpBinders(){
         viewModel.error.bind { [weak self] errorString in
@@ -86,10 +88,19 @@ class HomeViewController: BaseViewController {
                 return
             }
             
-            let allPromptDto = allPrompts.map { prompt in
+            var allPromptDto = allPrompts.map { prompt in
                 return prompt.toPrompDto()
             }
             
+            allPromptDto = allPromptDto.sorted(by: { prompt1, prompt2 in
+                guard let actualPrompt1Out = prompt1.promptOutput,
+                        let actualPrompt2Out = prompt2.promptOutput else {
+                    return false
+                }
+                return actualPrompt1Out.created > actualPrompt2Out.created
+            })
+            
+            // TODO: handle update better - causing a ui blinking bug
             self?.viewModel.remove(allPromptDto)
             self?.viewModel.add(allPromptDto)
             
@@ -114,6 +125,39 @@ class HomeViewController: BaseViewController {
 
 //MARK: Objc functions
 extension HomeViewController{
+    
+    @objc func fetchMorePaginated(_ notification: Notification){
+        print("Answered notification")
+        
+        viewModel.fetchPaginatedPrompts { [weak self] prompts, error in
+            guard error == nil, let allPrompts = prompts else {
+                self?.viewModel.error.value = error?.localizedDescription
+                return
+            }
+            
+            var newPromptDtos = allPrompts.map { prompt in
+                return prompt.toPrompDto()
+            }
+            
+            if var promptDtos = self?.viewModel.items.value{
+                promptDtos.append(contentsOf: newPromptDtos)
+                
+                promptDtos = promptDtos.sorted(by: { prompt1, prompt2 in
+                    guard let actualPrompt1Out = prompt1.promptOutput,
+                            let actualPrompt2Out = prompt2.promptOutput else {
+                        return false
+                    }
+                    return actualPrompt1Out.created > actualPrompt2Out.created
+                })
+                
+                promptDtos = promptDtos.uniqued()
+                
+                // TODO: handle update better - causing a ui blinking bug
+                self?.viewModel.remove(promptDtos)
+                self?.viewModel.add(promptDtos)
+            }
+        }
+    }
     
     @objc func openBuyToken(){
         present(BuyTokenViewController(), animated: true)
@@ -177,17 +221,21 @@ extension HomeViewController{
 extension HomeViewController: NetworkServiceDelegate {
     func success(_ network: NetworkService, output: PromptOutputDTO) {
         
-//        let outputText = (newPrompt?.prompt)! + " \n " +
-        guard let firstOutput = output.choices.first,
-              let token = viewModel.userToken.value,
-              let uTkAmount = token.amount else {
+        guard var firstChoice = output.choices.first,
+              let token = viewModel.userToken.value else {
             return
         }
         
-        newPrompt?.outputText = firstOutput.text
-        newPrompt?.promptOutput = output
+        var myOutput = output
         
-        TokenManager.shared.updateTokenUsage(outputText: firstOutput.text, tokenAmount: uTkAmount, token: token) { [weak self] result in
+        firstChoice.text = firstChoice.text.trim()
+        
+        newPrompt?.outputText = firstChoice.text
+        
+        myOutput.choices = [firstChoice]
+        newPrompt?.promptOutput = myOutput
+        
+        TokenManager.shared.updateTokenUsage(usageTotal: output.usage.total_tokens, token: token) { [weak self] result in
             switch result{
             case .success(let tk):
                 

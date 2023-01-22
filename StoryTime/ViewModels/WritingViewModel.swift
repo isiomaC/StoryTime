@@ -28,11 +28,26 @@ class WritingViewModel {
         
     }
     
-    func updatePromptOuput(_ uid: String, prompt: PromptDTO?){
-        
-    }
+//    func updatePromptOuput(_ uid: String, prompt: PromptDTO, completion: @escaping(Error?) -> Void){
+//        guard let promptId = prompt.id else {
+//            return
+//        }
+//        
+//        let promptToUpdate : [String: Any] = [
+//            "prompt": prompt.prompt as Any,
+//            "output": prompt.promptOutput as Any
+//        ]
+//
+//        FirebaseService.shared.updateDocumentById(.promptOuput, id: promptId, data: promptToUpdate) { error in
+//            guard error == nil else {
+//                completion(error)
+//                return
+//            }
+//            completion(nil)
+//        }
+//    }
     
-    func savePromptOutput(_ uid: String, prompt: PromptDTO?){
+    func savePromptOutput(_ uid: String, prompt: PromptDTO?, completion: @escaping(Error?) -> Void){
         
         guard let myPrompt = prompt, let promptText = myPrompt.prompt, let promptOuput = myPrompt.promptOutput else {
             return
@@ -44,7 +59,14 @@ class WritingViewModel {
             return
         }
         
-        FirebaseService.shared.saveDocument(.promptOuput, data: promptToSave)
+        FirebaseService.shared.saveDocument(.promptOuput, data: promptToSave){ ref, error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            
+            completion(nil)
+        }
     }
     
 }

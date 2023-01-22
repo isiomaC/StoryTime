@@ -21,10 +21,12 @@ class WritingView: BaseView {
     
     lazy var wordCount = ViewGenerator.getLabel(LabelOptions(text: "words", color: .secondaryLabel, fontStyle: AppFonts.Italic(.caption)))
     
-    lazy var promptField = ViewGenerator.getTextField(TextFieldOptions(placeholder: "Enter prompt*", fontStyle: AppFonts.body))
+    lazy var promptField = ViewGenerator.getTextField(TextFieldOptions(placeholder: "Tell me what you want*", fontStyle: AppFonts.body))
 
-    lazy var outOfTokenView = UIView(frame: CGRect(x: 0, y: 0, width: Dimensions.SCREENSIZE.width, height: 20))
-    lazy var outOFTokenText = ViewGenerator.getLabel(LabelOptions(text: "out of tokens", color: .black, fontStyle: AppFonts.Italic(.body)))
+    lazy var notificationView = UIView(frame: CGRect(x: 0, y: 0, width: Dimensions.SCREENSIZE.width, height: 20))
+    lazy var notificationText = ViewGenerator.getLabel(LabelOptions(text: "", color: .black, fontStyle: AppFonts.Italic(.body)))
+    
+    lazy var activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
     
     override func layoutSubviews(){
         super.layoutSubviews()
@@ -36,14 +38,14 @@ class WritingView: BaseView {
         MyColors.setGradientBackground(view: outputField, top: MyColors.topGradient, bottom: .white)
         
         outputField.layer.cornerRadius = 20
-        outOfTokenView.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 20)
+        notificationView.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 20)
         
         promptField.layer.borderColor = MyColors.primary.cgColor
         promptField.layer.borderWidth = CGFloat(1)
         promptField.setLeftPaddingPoints(5)
         promptField.setRightPaddingPoints(5)
         
-        outOfTokenView.isHidden = true
+        notificationView.isHidden = true
         
         wordCount.textAlignment = .right
     }
@@ -52,13 +54,14 @@ class WritingView: BaseView {
         wordCount.text = "\(count) words"
     }
     
-    func showOutOfToken(_ showDuration: Double, _ animationDuration: Double){
+    func showNotification(text: String, _ showDuration: Double, _ animationDuration: Double){
+        notificationText.text = text
         UIView.animate(withDuration: animationDuration) { [weak self] in
-            self?.outOfTokenView.isHidden = false
+            self?.notificationView.isHidden = false
         }
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + showDuration) {
             UIView.animate(withDuration: 0.3) { [weak self] in
-                self?.outOfTokenView.isHidden = true
+                self?.notificationView.isHidden = true
             }
         }
     }
@@ -70,10 +73,11 @@ class WritingView: BaseView {
         addSubview(saveBtn)
         addSubview(promptBtn)
         addSubview(iconBtn)
+        addSubview(activityIndicator)
         
         
-        addSubview(outOfTokenView)
-        outOfTokenView.addSubview(outOFTokenText)
+        addSubview(notificationView)
+        notificationView.addSubview(notificationText)
         
         
         addSubview(wordCount)
@@ -81,26 +85,37 @@ class WritingView: BaseView {
         
         triggerConstraints()
         
-        outOfTokenView.backgroundColor = MyColors.hexStringToUIColor(hex: "FCF5E8")
+        notificationView.backgroundColor = MyColors.hexStringToUIColor(hex: "FCF5E8")
         
+        activityIndicator.color = MyColors.topGradient 
+        activityIndicator.isOpaque = true
     }
+    
+//    activityIndicator.color = MyColors.bottomGradient
+//    activityIndicator.startAnimating()
     
     private func triggerConstraints(){
         
-        outOfTokenView.translatesAutoresizingMaskIntoConstraints = false
-        outOfTokenView.bottomAnchor.constraint(equalTo: outputField.bottomAnchor).isActive = true
-        outOfTokenView.widthAnchor.constraint(equalTo: outputField.widthAnchor).isActive = true
-        outOfTokenView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        outOfTokenView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        notificationView.translatesAutoresizingMaskIntoConstraints = false
+        notificationView.bottomAnchor.constraint(equalTo: outputField.bottomAnchor).isActive = true
+        notificationView.widthAnchor.constraint(equalTo: outputField.widthAnchor).isActive = true
+        notificationView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        notificationView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        outOFTokenText.centerXAnchor.constraint(equalTo: outOfTokenView.centerXAnchor).isActive = true
-        outOFTokenText.centerYAnchor.constraint(equalTo: outOfTokenView.centerYAnchor).isActive = true
+        notificationText.centerXAnchor.constraint(equalTo: notificationView.centerXAnchor).isActive = true
+        notificationText.centerYAnchor.constraint(equalTo: notificationView.centerYAnchor).isActive = true
         
         // Output field
         outputField.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 0.6).isActive = true
         outputField.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         outputField.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         outputField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        activityIndicator.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        activityIndicator.topAnchor.constraint(equalTo: outputField.bottomAnchor, constant: 10).isActive = true
+        activityIndicator.leadingAnchor.constraint(equalTo: outputField.leadingAnchor).isActive = true
         
         wordCount.trailingAnchor.constraint(equalTo: outputField.trailingAnchor).isActive = true
         wordCount.topAnchor.constraint(equalTo: outputField.bottomAnchor, constant: 10).isActive = true

@@ -16,11 +16,10 @@ class HomeCell: UICollectionViewCell, Providable {
 
     lazy var title = ViewGenerator.getLabel(LabelOptions(text: "title", color: .label, fontStyle: AppFonts.Bold(.body)))
 
-    lazy var subTitle = ViewGenerator.getLabel(LabelOptions(text: "subtitle", color: .label, fontStyle: AppFonts.caption))
+    lazy var subTitle = ViewGenerator.getLabel(LabelOptions(text: "subtitle", color: .label, fontStyle: AppFonts.small))
     
-    lazy var time = ViewGenerator.getLabel(LabelOptions(text: "2 mins ago", color: .label, fontStyle: AppFonts.small))
+    lazy var time = ViewGenerator.getLabel(LabelOptions(text: "", color: .label, fontStyle: AppFonts.small))
 
-    
     let cornerRadius: CGFloat = 10
 
     override init(frame: CGRect) {
@@ -36,22 +35,26 @@ class HomeCell: UICollectionViewCell, Providable {
     }
 
     public func provide(_ promptDto: PromptDTO) {
-        title.text = promptDto.prompt
+        title.text = "''"+promptDto.prompt!+"''"
         subTitle.text = promptDto.outputText
-//        imageView.image = UIImage(systemName: "trash")
+        
+        if let createdDate = promptDto.promptOutput?.created {
+            let date = Date(timeIntervalSince1970:  TimeInterval(createdDate))
+            time.text = date.timeAgoSinceDate()
+        }
+        
     }
 
 
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 3, left: 0, bottom: 3, right: 0))
         
         contentView.layer.masksToBounds = false
         contentView.layer.cornerRadius = cornerRadius
+        
 //        contentView.layer.borderWidth = 1
-
 //        addDropShadow()
         // Specify a shadowPath to improve shadow drawing performance
     }
@@ -113,9 +116,9 @@ class HomeCell: UICollectionViewCell, Providable {
         time.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
         
-        title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+        title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
 //        title.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10).isActive = true
-        title.bottomAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10).isActive = true
+        title.bottomAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         title.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.95).isActive = true
 
         subTitle.topAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true

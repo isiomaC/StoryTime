@@ -100,24 +100,21 @@ class TokenManager: NSObject {
     }
     
     
-    func updateTokenUsage(outputText: String, tokenAmount: Int, token: TokenDTO, completion: @escaping(Result<TokenDTO, Error>) -> Void){
+    func updateTokenUsage(usageTotal: Int, token: TokenDTO, completion: @escaping(Result<TokenDTO, Error>) -> Void){
         
-        guard let userId = userToken?.userId else {
+        guard let userId = userToken?.userId, let currentUserTokenAmt = token.amount else {
             return
         }
         
-        let outputTextCount = outputText.split(separator: " ").count
-        
         var mToken = token
-        var uTkAmount = tokenAmount
         
-        uTkAmount = uTkAmount - outputTextCount
+        let newUserTokenAmount = currentUserTokenAmt - usageTotal
         
-        mToken.amount = uTkAmount
+        mToken.amount = newUserTokenAmount
         
         userToken = mToken
     
-        FirebaseService.shared.updateDocument(.token, query: ["userId" : userId], data: ["amount" : uTkAmount]) { [weak self] error in
+        FirebaseService.shared.updateDocument(.token, query: ["userId" : userId], data: ["amount" : newUserTokenAmount]) { [weak self] error in
             
             guard error == nil, let tk = self?.userToken else {
                 print("error updating token")

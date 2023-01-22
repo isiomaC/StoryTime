@@ -54,7 +54,7 @@ class WritingViewController: BaseViewController{
         
         view = (coordinator as? MainCoordinator)?.wrapScrollView(writingView)
         
-        addBarButtonItems()
+//        addBarButtonItems()
         
         if let promp = viewModel.currentPrompt {
             viewModel.promptText.value = promp.prompt
@@ -96,12 +96,10 @@ class WritingViewController: BaseViewController{
             
             DispatchQueue.main.async{
                 strongSelf.writingView.outputField.setTyping(text: out)
-                strongSelf.writingView.setWordCount(out.count)
+                strongSelf.writingView.setWordCount(out.split(separator: " ").count)
             }
         }
     }
-    
-   
     
     private func setUpActions(){
         writingView.promptBtn.addTarget(self, action: #selector(triggerPrompt), for: .touchUpInside)
@@ -135,50 +133,91 @@ extension WritingViewController {
             let animationDuration = 0.3
             let showDuration: Double = 5
             
-            writingView.showOutOfToken(showDuration, animationDuration)
+            writingView.showNotification(text: "out of tokens" ,showDuration, animationDuration)
         }
     }
     
+    
     @objc func saveOutput(){
-        let uid = FirebaseService.shared.getUID()
         
-        if let promptId = viewModel.currentPrompt?.id {
-            
-            FirebaseService.shared.getById(.promptOuput, id: promptId, completion: { [weak self] (documentSnapShot, error) in
-                
-                guard error == nil, let docSnapShot = documentSnapShot, let strongSelf = self else {
+        guard let prompt = viewModel.currentPrompt else { return }
+        
+        let uid = FirebaseService.shared.getUID()
+        writingView.activityIndicator.startAnimating()
+        
+        if prompt.id != nil {
+
+            FirebaseService.shared.getById(.promptOuput, id: prompt.id!) { [ weak self] docSnapShot, error in
+                guard let snapShot = docSnapShot,
+                      let existingPrompt = Prompt(snapShot: snapShot),
+                      error == nil else {
+                    self?.writingView.activityIndicator.stopAnimating()
+                    self?.showAlert(.error, (title: "", message: "Something went wrong"))
                     return
                 }
                 
-                if let prompt = Prompt(snapShot: docSnapShot){
+                if prompt.prompt == existingPrompt.prompt
+                    && prompt.outputText == existingPrompt.output.choices.first?.text {
                     
-                    if prompt.prompt == strongSelf.viewModel.currentPrompt?.prompt
-                        && prompt.userId == uid
-                        && prompt.output == strongSelf.viewModel.currentPrompt?.promptOutput {
-                        
-                        //show Error, No Change to FIle
-                        strongSelf.showAlert(.error, (title: "", message: "File already saved"))
-                        
-                    }else{
-                        strongSelf.viewModel.updatePromptOuput(uid, prompt: strongSelf.viewModel.currentPrompt)
+                    self?.writingView.activityIndicator.stopAnimating()
+                    self?.showAlert(.error, (title: "", message: "Prompt already saved"))
+                }else{
+                    
+                    let userId = FirebaseService.shared.getUID()
+                    
+                    guard let newPromptText = prompt.prompt, let ouput = prompt.promptOutput else {
+                        self?.writingView.activityIndicator.stopAnimating()
+                        self?.showAlert(.error, (title: "", message: "Something went wrong"))
+                        return
+                    }
+                    
+                    let updPrompt = Prompt(id: prompt.id!, prompt: newPromptText, userId: userId, output: ouput)
+                    
+                    if let promptToUpdate = updPrompt.removeKey() {
+                        snapShot.reference.updateData(promptToUpdate)
+                    }
+                   
+                    DispatchQueue.main.async { [weak self] in
+                        self?.writingView.activityIndicator.stopAnimating()
+                        let animationDuration = 0.3
+                        let showDuration: Double = 3
+                        self?.writingView.showNotification(text: "prompt updated" ,showDuration, animationDuration)
                     }
                 }
-            })
+            }
             
         } else {
             
-            viewModel.savePromptOutput(uid, prompt: viewModel.currentPrompt)
+            viewModel.savePromptOutput(uid, prompt: viewModel.currentPrompt){ [weak self] error in
+                
+                guard error == nil else {
+                    self?.writingView.activityIndicator.stopAnimating()
+                    self?.showAlert(.error, (title: "", message: "Something went wrong"))
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self?.writingView.activityIndicator.stopAnimating()
+                    let animationDuration = 0.3
+                    let showDuration: Double = 3
+                    self?.writingView.showNotification(text: "prompt saved" ,showDuration, animationDuration)
+                }
+            }
+            
         }
     }
+    
     
     @objc func shareOutput(){
         guard let shareText = viewModel.outputText.value else { return }
         showShareSheet(text: shareText)
     }
     
+    
     @objc func speak(){
         print("speak")
     }
+    
     
     @objc func options(){
         print("options")
@@ -189,13 +228,11 @@ extension WritingViewController {
 extension WritingViewController: NetworkServiceDelegate  {
     func success(_ network: NetworkService, output: PromptOutputDTO) {
         
-        guard let outputText = output.choices.first?.text, let uTkAmount = userToken?.amount,
-                let token = userToken else {
+        guard let token = userToken else {
             return
         }
         
-        
-        TokenManager.shared.updateTokenUsage(outputText: outputText, tokenAmount: uTkAmount, token: token) { result in
+        TokenManager.shared.updateTokenUsage(usageTotal: output.usage.total_tokens, token: token) { result in
             switch result{
             case .success(_):
 
@@ -203,12 +240,22 @@ extension WritingViewController: NetworkServiceDelegate  {
                     let mCoordinator = (self?.coordinator as? MainCoordinator)
                     mCoordinator?.navigationController?.stopActivityIndicator()
                     
+                    guard var firstChoice = output.choices.first else {
+                        return
+                    }
+                    
+                    var myOutput = output
+                    
+                    firstChoice.text = firstChoice.text.trim()
+                    
+                    myOutput.choices = [firstChoice]
+                    
                     // Update TextView to display output
-                    self?.viewModel.outputText.value = output.choices.first?.text
+                    self?.viewModel.outputText.value = firstChoice.text
                     
                     //Capture output incase it changes
-                    self?.viewModel.currentPrompt?.promptOutput = output
-                    self?.viewModel.currentPrompt?.outputText = output.choices.first?.text
+                    self?.viewModel.currentPrompt?.promptOutput = myOutput
+                    self?.viewModel.currentPrompt?.outputText = firstChoice.text
 
                 }
                 break
@@ -217,8 +264,6 @@ extension WritingViewController: NetworkServiceDelegate  {
                 break
             }
         }
-        
-
     }
     
     func failure(error: Error?) {
@@ -230,12 +275,12 @@ extension WritingViewController: NetworkServiceDelegate  {
 extension WritingViewController: UITextViewDelegate, UITextFieldDelegate  {
 
     func textViewDidChange(_ textView: UITextView) {
-        let wordCount = textView.text.count
+        let wordCount = textView.text.split(separator: " ").count
         writingView.setWordCount(wordCount)
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        let wordCount = textView.text.count
+        let wordCount = textView.text.split(separator: " ").count
         writingView.setWordCount(wordCount)
         
         viewModel.currentPrompt?.outputText = textView.text

@@ -18,6 +18,8 @@ enum CollectionName : String{
     case token
 }
 
+//TODO: Remove Test 
+let DOCUMENT_LIMIT = 8
 
 protocol FirebasServiceDelegate{
     
@@ -213,6 +215,35 @@ class FirebaseService {
         }
     }
     
+    func getPaginatedDocuments(_ collectionName: CollectionName, query: [String: Any]?, last: DocumentSnapshot?, completion: @escaping([QueryDocumentSnapshot]?, Error?) -> Void ){
+
+        guard let filter = query else { return }
+
+        let collection = collectionName.rawValue
+
+        let collectionRef: CollectionReference? = db?.collection(collection)
+
+        let firebaseQuery: Query? = updateFireQuery(filter, collectionRef: collectionRef)
+        
+        if let lastDocument = last {
+            firebaseQuery?.limit(to: DOCUMENT_LIMIT).start(atDocument: lastDocument).getDocuments(completion: { (querySnapShot, error) in
+                guard error == nil, let snapShot = querySnapShot else {
+                    completion(nil, error)
+                    return
+                }
+                completion(snapShot.documents, nil)
+            })
+        }else{
+            firebaseQuery?.limit(to: DOCUMENT_LIMIT).getDocuments(completion: { (querySnapShot, error) in
+                guard error == nil, let snapShot = querySnapShot else {
+                    completion(nil, error)
+                    return
+                }
+                completion(snapShot.documents, nil)
+            })
+        }
+    }
+    
     func getDocuments(_ collectionName: CollectionName, query: [String: Any]?, completion: @escaping QueryDocumentSnapshotHandler){
         let collection = collectionName.rawValue
          
@@ -299,6 +330,21 @@ class FirebaseService {
             document?.reference.updateData(data)
             completion(nil)
         })
+    }
+    
+    func updateDocumentById(_ collectionName: CollectionName, id: String, data: [String: Any], completion: @escaping (Error?) -> Void){
+        
+        let collection = collectionName.rawValue
+        
+        getById(collectionName, id: id) { snapShot, error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+           
+            snapShot?.reference.updateData(data)
+            completion(nil)
+        }
     }
     
     func updateDocument(_ collectionName: CollectionName, query: [String: Any], data: [String: Any], completion: @escaping DocumentSnapshotHandler){
@@ -392,7 +438,7 @@ class FirebaseService {
     
     
     // MARK: Save To Firebase Storage
-    private func saveFile(){
+    func saveFile(){
         
     }
     

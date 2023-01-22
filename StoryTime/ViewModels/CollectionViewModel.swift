@@ -48,7 +48,10 @@ class CollectionViewModel<CellType: UICollectionViewCell & Providable>: NSObject
             self.items.value?.append($0)
         }
         
-        update()
+        UIView.animate(withDuration: 0.5, delay: 0) { [weak self] in
+            self?.update()
+        }
+      
     }
     
     
@@ -57,7 +60,9 @@ class CollectionViewModel<CellType: UICollectionViewCell & Providable>: NSObject
             self.items.value?.removeAll { $0 == item }
         }
         
-        update()
+        UIView.animate(withDuration: 0.5, delay: 0) { [weak self] in
+            self?.update()
+        }
     }
 }
 

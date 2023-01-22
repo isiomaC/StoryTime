@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import FirebaseFirestore
 
 class HomeViewModel: CollectionViewModel<HomeCell>{
     
@@ -16,6 +17,9 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
     
     var coordinator : Coordinator?
     
+    var previousLastDocument: DocumentSnapshot?
+    var lastDocument: DocumentSnapshot?
+
     var userId: String
     
     init(collectionView: UICollectionView) {
@@ -35,7 +39,7 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
     
     func fetchPrompts(completion: @escaping([Prompt]?, Error?) -> Void) {
 
-        FirebaseService.shared.getDocuments(.promptOuput, query: [ "userId": userId ]) { documentSnapShot, error in
+        FirebaseService.shared.getPaginatedDocuments(.promptOuput, query: [ "userId": userId ], last: lastDocument) { [weak self] documentSnapShot, error in
             guard let snapShot = documentSnapShot, error == nil else {
                 completion(nil, error)
                 return
@@ -49,7 +53,51 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
                 }
             }
             
+            self?.previousLastDocument = nil
+            self?.lastDocument = snapShot.last
             completion(prompts, nil)
+        }
+    }
+    
+    func fetchPaginatedPrompts(completion: @escaping([Prompt]?, Error?) -> Void){
+       
+        FirebaseService.shared.getPaginatedDocuments(.promptOuput, query: [ "userId": userId ], last: lastDocument) { [weak self] documentsSnapShot, error in
+            guard let snapShot = documentsSnapShot, error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            var prompts : [Prompt] = []
+            
+            for shot in snapShot{
+                if let existingPrompt = Prompt(snapShot: shot) {
+                    prompts.append(existingPrompt)
+                }
+            }
+            
+            self?.previousLastDocument = self?.lastDocument
+            self?.lastDocument = snapShot.last
+            completion(prompts, nil)
+        }
+    }
+    
+    func deletePrompt(_ prompt: PromptDTO){
+        guard let id = prompt.id else { return }
+        
+        remove([prompt])
+        
+        FirebaseService.shared.deleteDocument(.promptOuput, docId: id)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let itemsCount = collectionView.numberOfItems(inSection: 0)
+        
+        if indexPath.row == itemsCount - 1 {
+            if previousLastDocument != lastDocument {
+                //TODO: trigger Notification to fetch more
+                
+                NotificationCenter.default.post(name: .fetchMore, object: nil)
+            }
         }
     }
 
@@ -65,6 +113,7 @@ extension HomeViewModel: UICollectionViewDelegate {
         }
         
         let mainCoordinator = coordinator as? MainCoordinator
+        
         let nextVC = WritingViewController(promptDto: myItem)
         
         mainCoordinator?.push(nextVC)
@@ -75,6 +124,36 @@ extension HomeViewModel: UICollectionViewDelegate {
         if let myItems = items.value{
             openStory(myItems[indexPath.row])
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let menuConfig = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] elements in
+            
+            guard let strongSelf = self else {
+                return nil
+            }
+            
+            return strongSelf.buildContextMenuForCell(indexPath)
+        }
+        
+        return menuConfig
+    }
+    
+    func buildContextMenuForCell(_ indexPath: IndexPath) -> UIMenu{
+        
+        let deleteAction =  UIAction(title: "Delete", image: UIImage(systemName: "trash.fill"), attributes: .destructive) { [weak self] action in
+
+            guard let myItems = self?.items.value else { return }
+            
+            let promtToDeplete = myItems[indexPath.row]
+            
+            self?.deletePrompt(promtToDeplete)
+            
+            let hapticFeedback = UINotificationFeedbackGenerator()
+            hapticFeedback.notificationOccurred(.success)
+        }
+        
+        return UIMenu(title: "", children: [deleteAction])
     }
     
 }

@@ -4,8 +4,6 @@
 <dict>
 	<key>APP_NAME</key>
 	<string>AiBuddy</string>
-	<key>PRIVACY_POLICY</key>
-	<string>link_to_policy</string>
 	<key>TERMS_EULA</key>
 	<string>https://www.apple.com/legal/internet-services/itunes/dev/stdeula/</string>
 	<key>APP_STORE_URL</key>

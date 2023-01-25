@@ -24,7 +24,6 @@ class WritingViewController: BaseViewController{
 
         if let promp = viewModel.currentPrompt, let outputExist = promp.outputText {
             
-            //MARK: TODO - trigger flag to Show the detail view of already existing prompts
             viewModel.outputText.value = outputExist
         }
     }

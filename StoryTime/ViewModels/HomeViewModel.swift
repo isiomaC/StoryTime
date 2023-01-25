@@ -94,7 +94,6 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
         
         if indexPath.row == itemsCount - 1 {
             if previousLastDocument != lastDocument {
-                //TODO: trigger Notification to fetch more
                 
                 NotificationCenter.default.post(name: .fetchMore, object: nil)
             }

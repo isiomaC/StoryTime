@@ -14,18 +14,14 @@ class WritingViewModel {
     
     var errorText: ObservableObject<String> = ObservableObject(nil)
     
-//    var options: ObservableObject<[String: Any]?> = ObservableObject(nil)
-    
     var outputText: ObservableObject<String> = ObservableObject(nil)
     
     var currentPrompt: PromptDTO?
     
     init(){ }
     
-    //MARK: TODO - use network to get prompts from openai
     func triggerPrompt(_ text: String){
         NetworkService.shared.postPrompt(text)
-        
     }
     
 //    func updatePromptOuput(_ uid: String, prompt: PromptDTO, completion: @escaping(Error?) -> Void){

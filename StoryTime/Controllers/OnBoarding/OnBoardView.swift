@@ -12,7 +12,7 @@ class OnBoardView: BaseView {
     
     lazy var title = ViewGenerator.getLabel(LabelOptions(text: "Write your valuable content, save and share", color: .label, fontStyle: AppFonts.Bold(.h4)))
     
-    lazy var body = ViewGenerator.getLabel(LabelOptions(text: "hey this app can lorem ipsum lorem iipsum lorem ipsum, lorem ipsum lorem iipsum lorem ipsum, lorem ipsum lorem iipsum lorem ipsum", color: .secondaryLabel, fontStyle: AppFonts.body))
+    lazy var body = ViewGenerator.getLabel(LabelOptions(text: "", color: .secondaryLabel, fontStyle: AppFonts.body))
     
     lazy var undrawImage = ViewGenerator.getImageView(ImageViewOptions(image: UIImage(named: "undraw"), size: (100, 100)))
     

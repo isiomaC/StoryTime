@@ -36,19 +36,19 @@ struct Utils {
     }
     
     
-    static var privacyPolicyUrl : String {
-        get{
-            let value = readFromPList("Config", key: "PRIVACY_POLICY")
-            return value
-        }
-    }
-
-    static var termsAppleEula : String {
-        get{
-            let value = readFromPList("Config", key: "TERMS_EULA")
-            return value
-        }
-    }
+//    static var privacyPolicyUrl : String {
+//        get{
+//            let value = readFromPList("Config", key: "PRIVACY_POLICY")
+//            return value
+//        }
+//    }
+//
+//    static var termsAppleEula : String {
+//        get{
+//            let value = readFromPList("Config", key: "TERMS_EULA")
+//            return value
+//        }
+//    }
     
     static func readFromPList(_ filename: String, key: String) -> String{
         guard let filePath = Bundle.main.path(forResource: filename, ofType: "plist") else {

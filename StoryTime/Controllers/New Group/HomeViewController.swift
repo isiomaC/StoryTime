@@ -190,10 +190,8 @@ extension HomeViewController{
 
                 viewModel.userToken.value = userToken
 
-                // proceed to prompt after update
                 newPrompt = PromptDTO(id: nil, prompt: newPromptText, promptOutput: nil)
 
-                //MARK: TODO - Prefetch from API here to get prompt before showing the page
                 if let new = newPrompt, let promptText = new.prompt{
                     let mCoordinator = (coordinator as? MainCoordinator)
                     mCoordinator?.navigationController?.startActivityIndicator()
@@ -248,7 +246,9 @@ extension HomeViewController: NetworkServiceDelegate {
                 }
                 break
             case .failure(_):
-                print("Error updating token")
+                DispatchQueue.main.async { [weak self] in
+                    self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                }
                 break
             }
         }
@@ -274,7 +274,6 @@ extension HomeViewController: NetworkServiceDelegate {
     }
     
     func failure(error: Error?) {
-        print(error)
         DispatchQueue.main.async { [weak self] in
             (self?.coordinator as? MainCoordinator)?.navigationController?.stopActivityIndicator()
             

@@ -18,7 +18,6 @@ enum CollectionName : String{
     case token
 }
 
-//TODO: Remove Test 
 let DOCUMENT_LIMIT = 8
 
 protocol FirebasServiceDelegate{
@@ -327,14 +326,18 @@ class FirebaseService {
                 return
             }
             let document = querySnapShot?.documents.first
-            document?.reference.updateData(data)
-            completion(nil)
+            
+            document?.reference.updateData(data){ error in
+                if let err = error {
+                    completion(err)
+                }else {
+                    completion(nil)
+                }
+            }
         })
     }
     
     func updateDocumentById(_ collectionName: CollectionName, id: String, data: [String: Any], completion: @escaping (Error?) -> Void){
-        
-        let collection = collectionName.rawValue
         
         getById(collectionName, id: id) { snapShot, error in
             guard error == nil else {
@@ -342,8 +345,13 @@ class FirebaseService {
                 return
             }
            
-            snapShot?.reference.updateData(data)
-            completion(nil)
+            snapShot?.reference.updateData(data){ error in
+                if let err = error {
+                    completion(err)
+                }else {
+                    completion(nil)
+                }
+            }
         }
     }
     

@@ -53,6 +53,36 @@ class TokenManager: NSObject {
     }()
     
     
+    func updateTokenAmount(_ amount: Int, completion: @escaping(Error?) -> Void){
+        
+        let userId = FirebaseService.shared.getUID()
+        
+        FirebaseService.shared.getDocuments(.token, query: [ "userId": userId ]) { [weak self] documentSnapShot, error in
+            guard let snapShot = documentSnapShot?.first,
+                  var token = Token(snapShot: snapShot)?.toTokenDto(),
+                  let tkAmount = token.amount,
+                    error == nil else {
+                completion(error)
+                return
+            }
+            
+            let newAmount = tkAmount + amount
+            
+            snapShot.reference.updateData(["amount": newAmount]){ [weak self] error in
+                if let err = error {
+                    completion(err)
+                }else {
+                    
+                    token.amount = newAmount
+                    self?.userToken = token
+                    
+                    completion(nil)
+                }
+            }
+        }
+    }
+    
+    
     func initializeFirstUserToken(completion: @escaping() -> Void){
         
         let userId = FirebaseService.shared.getUID()

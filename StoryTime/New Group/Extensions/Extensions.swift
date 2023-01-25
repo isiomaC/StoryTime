@@ -16,6 +16,7 @@ extension Notification.Name{
     static let promptSuccess = Notification.Name("promptSuccess")
     static let promptFailure = Notification.Name("promptFailure")
     static let fetchMore = Notification.Name("fetchMore")
+    static let fcmToken = Notification.Name("FCMToken")
 }
 
 
@@ -162,7 +163,7 @@ extension UITextField {
 
 //MARK: UITextView
 extension UITextView{
-    func setTyping(text: String, characterDelay: TimeInterval = 5.0) {
+    func setTyping(text: String, characterDelay: TimeInterval = 3.0) {
         
         //Clean up - it exist already
         self.text = ""

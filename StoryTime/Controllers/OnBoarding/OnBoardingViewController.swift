@@ -22,6 +22,7 @@ class OnBoardingViewController: UIViewController{
         
         onBoardView.getStartedBtn.addTarget(self, action: #selector(getStarted), for: .touchUpInside)
         
+        onBoardView.body.text = UserDefaults.standard.string(forKey: RemoteConfigKeys.landingText)
     }
 }
 
@@ -33,7 +34,6 @@ extension OnBoardingViewController {
         
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         
-        //MARK: TODO - Decide on where to go after on boarding..
         appDelegate?.setRootViewController(LoginViewController())
     }
 

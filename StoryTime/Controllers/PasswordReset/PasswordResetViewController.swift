@@ -77,7 +77,6 @@ extension PasswordResetViewController{
         }else{
             
             if newPwd == newPwd2 {
-                // TODO: password Reset
                 FirebaseService.shared.updatePasssword(password: newPwd) { error in
                     guard error == nil else {
                         return
@@ -89,7 +88,6 @@ extension PasswordResetViewController{
                     }
                 }
             }else {
-                //TODO: Alert passwords do not match
                 showAlert(.error, (title: "Error", message: "New password doesn't match"))
             }
         }

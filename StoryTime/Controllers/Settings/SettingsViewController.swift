@@ -199,12 +199,17 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                     break;
                 
                 case SettingsConstants.privacyPolicy:
-                    // TODO: Implement Privacy Policy link here
-                    Utils.showSafariLink(self, pageRoute: Utils.privacyPolicyUrl)
+                    if let policyLink = UserDefaults.standard.string(forKey: RemoteConfigKeys.privacy){
+                        Utils.showSafariLink(self, pageRoute: policyLink)
+                    }
+                  
                     break;
                 
                 case SettingsConstants.termsUse:
-                    Utils.showSafariLink(self, pageRoute: Utils.termsAppleEula)
+                    if let termsLink = UserDefaults.standard.string(forKey: RemoteConfigKeys.terms){
+                        Utils.showSafariLink(self, pageRoute: termsLink)
+                    }
+                   
                     break;
                 
                 default : break;

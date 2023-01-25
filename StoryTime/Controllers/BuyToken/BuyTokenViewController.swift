@@ -43,15 +43,61 @@ class BuyTokenViewController: BaseViewController {
     }
     
     private func getProducts(){
+        startActivityIndicator()
         TokenManager.shared.getProducts(delegate: self)
     }
     
 }
 
+// Product Request Delegates
+extension BuyTokenViewController : SKProductsRequestDelegate{
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        
+        TokenManager.shared.products = response.products
+        
+        let getProduct : (BuyButtonTags) -> SKProduct = { key in
+            let product = response.products.first { prod in
+                return prod.productIdentifier == TokenManager.shared.buyButtonMap[key]
+            }
+            
+            return product ?? SKProduct()
+        }
+        
+        let product001 = getProduct(.aiBuddy_001)
+        let product002 = getProduct(.aiBuddy_002)
+        let product003 = getProduct(.aiBuddy_003)
+            
+        DispatchQueue.main.async { [weak self] in
+
+           //MARK: Update button UI to show price/amount of tokens
+            
+            UIView.animate(withDuration: 0.5, delay: 0) {
+                self?.buyTokenView.button_199.setTitle("\(TokenManager.shared.priceOf(product: product001)) / \(aiBuddy_001_AMOUNT) tokens", for: .normal)
+                self?.buyTokenView.button_299.setTitle("\(TokenManager.shared.priceOf(product: product002)) / \(aiBuddy_002_AMOUNT) tokens", for: .normal)
+                self?.buyTokenView.button_399.setTitle("\(TokenManager.shared.priceOf(product: product003)) / \(aiBuddy_003_AMOUNT) tokens", for: .normal)
+                self?.stopActivityIndicator()
+            }
+           
+        }
+    }
+    
+    func request(_ request: SKRequest, didFailWithError error: Error) {
+        DispatchQueue.main.async { [weak self] in
+
+            self?.showAlert(.info, (title: "Error", message: ""))
+           
+        }
+    }
+}
+
+
 extension BuyTokenViewController {
     @objc func buyToken(sender: UIButton){
         
-//        startActivityIndicator()
+        startActivityIndicator()
+        
+        // Disables interactive dismissal of ViewController
+        isModalInPresentation = true
         
         switch sender.tag {
         case BuyButtonTags.aiBuddy_001.rawValue:
@@ -62,14 +108,11 @@ extension BuyTokenViewController {
             
             print("Price of product",TokenManager.shared.priceOf(product: product))
             
-//            if SKPaymentQueue.canMakePayments(){
-//                let payment = SKPayment(product: product)
-//                SKPaymentQueue.default().add(self)
-//                SKPaymentQueue.default().add(self)
-//                SKPaymentQueue.default().add(payment)
-//            }
-            
-            //MARK: Add 2000 tokens for user on success
+            if SKPaymentQueue.canMakePayments(){
+                let payment = SKPayment(product: product)
+                SKPaymentQueue.default().add(self)
+                SKPaymentQueue.default().add(payment)
+            }
             
             break
         case BuyButtonTags.aiBuddy_002.rawValue:
@@ -79,7 +122,11 @@ extension BuyTokenViewController {
             
             print("Price of product",TokenManager.shared.priceOf(product: product))
             
-            //MARK: Add 5000 tokens for user on success
+            if SKPaymentQueue.canMakePayments(){
+                let payment = SKPayment(product: product)
+                SKPaymentQueue.default().add(self)
+                SKPaymentQueue.default().add(payment)
+            }
             
             break
         case BuyButtonTags.aiBuddy_003.rawValue:
@@ -87,9 +134,13 @@ extension BuyTokenViewController {
                 return
             }
             
-            print("Price of product",TokenManager.shared.priceOf(product: product))
+            print("Price of product", TokenManager.shared.priceOf(product: product))
             
-            //MARK: Add 10000 tokens for user on success
+            if SKPaymentQueue.canMakePayments(){
+                let payment = SKPayment(product: product)
+                SKPaymentQueue.default().add(self)
+                SKPaymentQueue.default().add(payment)
+            }
             
             break
         default:
@@ -116,65 +167,113 @@ extension BuyTokenViewController {
     
 }
 
+
+// Payment Delegates
 extension BuyTokenViewController: SKPaymentTransactionObserver{
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         var mIndex = 0
         for transaction in transactions{
             switch transaction.transactionState{
-            case .purchasing:
-                break
-                
             case .purchased:
-                complete(transaction: transaction, currentIndex: mIndex, totalCount: transactions.count)
-                break
-                
-            case .restored:
-                // MARK: TODO - handle restore
-                print("restore in queue")
+                complete(transaction: transaction)
+                print("purchased in queue")
                 break
                 
             case .failed:
-                // MARK: TODO - handle failure
+                complete(transaction: transaction)
                 print("failed in queue")
                 break
-            default:
-                break
+                
+            case .purchasing: break
+                
+            case .restored: break
+            
+            default: break
             }
             mIndex += 1
         }
     }
     
-    private func complete(transaction: SKPaymentTransaction, currentIndex: Int, totalCount: Int) {
-        //MARK: add tokens for User in Firebase
+    private func complete(transaction: SKPaymentTransaction) {
         
-        if currentIndex == totalCount-1 {
-            showFinishNotification(transaction.transactionState)
-        }
         SKPaymentQueue.default().finishTransaction(transaction)
         SKPaymentQueue.default().remove(self)
+        
+        let productIdentifier = transaction.payment.productIdentifier
+        
+        let tk = TokenManager.shared
+        
+        let state = transaction.transactionState
+        
+        if state == .failed {
+            showFinishNotification(transaction.transactionState, transaction.error as? NSError)
+        }
+        
+        if state == .purchased {
+            switch productIdentifier {
+            case tk.buyButtonMap[.aiBuddy_001]:
+                TokenManager.shared.updateTokenAmount(aiBuddy_001_AMOUNT) { [weak self] error in
+                    
+                    guard error == nil else {
+                        self?.stopActivityIndicator()
+                        self?.isModalInPresentation = false
+                        self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                        return
+                    }
+                    self?.showFinishNotification(transaction.transactionState)
+                }
+                break
+            case tk.buyButtonMap[.aiBuddy_002]:
+                TokenManager.shared.updateTokenAmount(aiBuddy_002_AMOUNT) { [weak self] error in
+
+                    guard error == nil else {
+                        self?.stopActivityIndicator()
+                        self?.isModalInPresentation = false
+                        self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                        return
+                    }
+                    self?.showFinishNotification(transaction.transactionState)
+                }
+                break
+            case tk.buyButtonMap[.aiBuddy_003]:
+                TokenManager.shared.updateTokenAmount(aiBuddy_003_AMOUNT) { [weak self] error in
+                    
+                    guard error == nil else {
+                        self?.stopActivityIndicator()
+                        self?.isModalInPresentation = false
+                        self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                        return
+                    }
+                    self?.showFinishNotification(transaction.transactionState)
+                }
+                break
+            default: break
+            }
+        }
     }
     
     private func showFinishNotification(_ state : SKPaymentTransactionState, _ localizedError: NSError? = nil){
         switch state {
         case .purchased, .restored:
             DispatchQueue.main.async { [weak self] in
-//                self?.stopActivityIndicator()
+                self?.stopActivityIndicator()
                 
-                print("Purchase successful bitch")
+                self?.isModalInPresentation = false
                 
-                self?.dismiss(animated: true)
-                
+                self?.showAlert(.info, (title: "Purchase sucess", message: ""))
+
             }
             break
         case .failed:
             DispatchQueue.main.async { [weak self] in
-//                self?.stopActivityIndicator()
-                guard let strongSelf = self,
-                      let localizedDescription = localizedError?.localizedDescription,
-                      localizedError?.code != SKError.paymentCancelled.rawValue else { return }
+                self?.stopActivityIndicator()
                 
-                //MARK: LOCALIZED ERROR SHOWN HERE
-                print(localizedDescription)
+                self?.isModalInPresentation = false
+                
+                guard let error = localizedError,
+                      error.code != SKError.paymentCancelled.rawValue else { return }
+              
+                self?.showAlert(.error, (title: "Purchase unsuccessful", message: error.localizedDescription ))
             }
             break
         default:
@@ -184,6 +283,7 @@ extension BuyTokenViewController: SKPaymentTransactionObserver{
 
 }
 
+// Table View Delegates
 extension BuyTokenViewController: UITableViewDelegate, UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -233,39 +333,3 @@ extension BuyTokenViewController: UITableViewDelegate, UITableViewDataSource {
     
 }
 
-
-extension BuyTokenViewController : SKProductsRequestDelegate{
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        
-        TokenManager.shared.products = response.products
-        
-        let getProduct : (BuyButtonTags) -> SKProduct = { key in
-            let product = response.products.first { prod in
-                return prod.productIdentifier == TokenManager.shared.buyButtonMap[key]
-            }
-            
-            return product ?? SKProduct()
-        }
-        
-        let product001 = getProduct(.aiBuddy_001)
-        let product002 = getProduct(.aiBuddy_002)
-        let product003 = getProduct(.aiBuddy_003)
-            
-        DispatchQueue.main.async { [weak self] in
-            
-           //MARK: Update button UI to show price/amount of tokens
-            self?.buyTokenView.button_199.setTitle("\(TokenManager.shared.priceOf(product: product001)) / \(aiBuddy_001_AMOUNT) tokens", for: .normal)
-            self?.buyTokenView.button_299.setTitle("\(TokenManager.shared.priceOf(product: product002)) / \(aiBuddy_002_AMOUNT) tokens", for: .normal)
-            self?.buyTokenView.button_399.setTitle("\(TokenManager.shared.priceOf(product: product003)) / \(aiBuddy_003_AMOUNT) tokens", for: .normal)
-        }
-    }
-    
-    func request(_ request: SKRequest, didFailWithError error: Error) {
-        DispatchQueue.main.async { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            //MARK: LOCALIZED ERROR SHOWN HERE
-            print(error)
-        }
-    }
-}

@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+let STALE_CONFIG = "CONFIG_STALE"
+
 let FIREBASENOINTERNETCODE = 17020
 let AUTHINVALIDPWD = 17009
 let AUTHUNREGISTEREDEMAIL = 17011
@@ -104,6 +106,15 @@ struct AppFonts {
         return font
     }
 
+}
+
+
+// RemoteConfig Keys
+struct RemoteConfigKeys {
+    static let terms = "terms_and_conditions"
+    static let privacy = "privacy_policy"
+    static let kill_switch = "kill_switch"
+    static let landingText = "landing_text"
 }
 
 

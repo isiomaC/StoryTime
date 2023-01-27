@@ -62,7 +62,6 @@ class HomeViewController: BaseViewController {
         
         fetchPrompts()
     }
-
     
     private func setUpBinders(){
         viewModel.error.bind { [weak self] errorString in
@@ -73,9 +72,7 @@ class HomeViewController: BaseViewController {
         
         viewModel.userToken.bind { tokenDto in
             if let tk = tokenDto {
-                
-                //MARK: Update Token View Icon amount
-                print(tk)
+//                print(tk)
             }
         }
     }
@@ -240,6 +237,7 @@ extension HomeViewController: NetworkServiceDelegate {
                 self?.viewModel.userToken.value = tk
                 
                 DispatchQueue.main.async { [weak self] in
+                    self?.homeView.inputField.text = ""
                     let mCoordinator = (self?.coordinator as? MainCoordinator)
                     mCoordinator?.navigationController?.stopActivityIndicator()
                     mCoordinator?.push(WritingViewController(promptDto: (self?.newPrompt)!))
@@ -252,25 +250,6 @@ extension HomeViewController: NetworkServiceDelegate {
                 break
             }
         }
-        
-//        let outputTextCount = firstOutput.text.split(separator: " ").count
-//
-//        uTkAmount = uTkAmount - outputTextCount
-//
-//        token.amount = uTkAmount
-//
-//        TokenManager.shared.userToken = token
-//        viewModel.userToken.value = token
-//
-//        FirebaseService.shared.updateDocument(.token, query: ["userId" : userId], data: ["amount" : uTkAmount]) { [weak self] error in
-//
-//            guard error == nil else {
-//                print("error updating token")
-//                return
-//            }
-//
-//
-//        }
     }
     
     func failure(error: Error?) {

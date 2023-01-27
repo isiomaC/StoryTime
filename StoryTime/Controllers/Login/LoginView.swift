@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import GoogleSignIn
 
 
 class LoginView: BaseView{
@@ -19,7 +20,15 @@ class LoginView: BaseView{
     lazy var subTitle = ViewGenerator.getLabel(LabelOptions(text: "It only takes a minute", color: .black, fontStyle: AppFonts.caption))
     
     
-    lazy var googleBtn = ViewGenerator.getGradientButton(ButtonOptions(title: "Continue with Google", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
+//    lazy var googleBtn = ViewGenerator.getGradientButton(ButtonOptions(title: "Continue with Google", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
+    
+    lazy var googleBtn: GIDSignInButton = {
+        let btn = GIDSignInButton(frame: CGRect.zero)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.layer.cornerRadius = 15
+        btn.contentMode = .scaleAspectFit
+        return btn
+    }()
     
     lazy var loginBtn = ViewGenerator.getGradientButton(ButtonOptions(title: "Login", color: MyColors.primary,  image: nil, smiley: nil, titleColor: .label))
     
@@ -68,7 +77,7 @@ class LoginView: BaseView{
         super.layoutSubviews()
         
         MyColors.setGradientBackground(view: topArea, top: MyColors.topGradient, bottom: .systemBackground)
-        MyColors.setGradientBackground(view: googleBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
+//        MyColors.setGradientBackground(view: googleBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
         MyColors.setGradientBackground(view: loginBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
         
         emailField.addBottomBorder()
@@ -108,7 +117,7 @@ class LoginView: BaseView{
         loginBtn.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         
-        googleBtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
+//        googleBtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
         googleBtn.topAnchor.constraint(equalTo: loginBtn.bottomAnchor, constant: 20).isActive = true
         googleBtn.heightAnchor.constraint(equalToConstant: 45).isActive = true
         googleBtn.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true

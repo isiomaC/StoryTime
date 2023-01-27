@@ -7,6 +7,9 @@
 
 import Foundation
 import UIKit
+import GoogleSignIn
+import FirebaseCore
+import FirebaseAuth
 
 class LoginViewController: BaseViewController {
     
@@ -92,7 +95,7 @@ extension LoginViewController{
                     UserDefaults.standard.setValue(true, forKey: UserDefaultkeys.isAuthenticated)
                     
                     DispatchQueue.main.async { [weak self] in
-                        self?.startActivityIndicator()
+                        self?.stopActivityIndicator()
                         self?.dismiss(animated: true)
                         let appDelegate = UIApplication.shared.delegate as? AppDelegate
                         appDelegate?.setRootViewController(TabBarController())
@@ -103,8 +106,96 @@ extension LoginViewController{
     }
     
     
+    func prepareGoogleAuth(completion: @escaping (GIDToken?, GIDToken?) -> Void){
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] gidResult, error in
+            guard error == nil, let result = gidResult else {
+                self?.stopActivityIndicator()
+                
+                if error?.localizedDescription != "The user canceled the sign-in flow." {
+                    self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                }
+                
+                return
+            }
+            
+            let accessToken = result.user.accessToken
+            let idToken = result.user.idToken
+            
+            completion(accessToken, idToken)
+        }
+    }
+    
+    
     @objc func authenticateWithGoogle(){
-        print("call google provider")
+
+        DispatchQueue.main.async { [weak self] in
+            self?.startActivityIndicator()
+            self?.prepareGoogleAuth { accessToken, idToken in
+                guard let acsToken = accessToken, let identityToken = idToken else {
+                    self?.stopActivityIndicator()
+                    self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                    return
+                }
+                
+                let credential = GoogleAuthProvider.credential(withIDToken: identityToken.tokenString, accessToken: acsToken.tokenString)
+                
+                FirebaseService.shared.auth?.signIn(with: credential){ authResult, error in
+                    guard error == nil, let result = authResult else {
+                        self?.stopActivityIndicator()
+                        self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                        return
+                    }
+                    
+                    FirebaseService.shared.getDocuments(.user, query: ["guid": result.user.uid]) { snapShot, error in
+                        
+                        guard error == nil, let documentSnapShot = snapShot, let email = result.user.email else {
+                            self?.stopActivityIndicator()
+                            self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                            return
+                        }
+                        
+                        if documentSnapShot.count > 0 {
+                            
+                            self?.stopActivityIndicator()
+                            self?.dismiss(animated: true){
+                                let appDelegate = UIApplication.shared.delegate as? AppDelegate
+                                appDelegate?.setRootViewController(TabBarController())
+                            }
+                           
+                        }else {
+                            
+                            // MARK: Brand New User
+                            var userDto = User(id: "", email: email, guid: result.user.uid, timestamp: Date())
+                            
+                            guard let userSaveDto = userDto.removeKey() else {
+                                self?.stopActivityIndicator()
+                                self?.showAlert(.error, (title: "Error", message: "Something went wrong, Please try again"))
+                                return
+                            }
+                            
+                            FirebaseService.shared.saveDocument(.user, data: userSaveDto) { (usersRef, error) in
+                                
+                                guard let ref = usersRef else {
+                                    self?.stopActivityIndicator()
+                                    self?.showAlert(.error, (title: "Error", message: "Something went wrong, Please try again"))
+                                    return
+                                }
+                                
+                                userDto.id = ref.documentID
+                                
+                                TokenManager.shared.initializeFirstUserToken {
+                                    self?.stopActivityIndicator()
+                                    self?.dismiss(animated: true){
+                                        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+                                        appDelegate?.setRootViewController(TabBarController())
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     

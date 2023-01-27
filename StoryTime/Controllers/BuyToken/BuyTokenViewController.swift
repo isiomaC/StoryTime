@@ -106,7 +106,6 @@ extension BuyTokenViewController {
                 return
             }
             
-            print("Price of product",TokenManager.shared.priceOf(product: product))
             
             if SKPaymentQueue.canMakePayments(){
                 let payment = SKPayment(product: product)
@@ -120,7 +119,6 @@ extension BuyTokenViewController {
                 return
             }
             
-            print("Price of product",TokenManager.shared.priceOf(product: product))
             
             if SKPaymentQueue.canMakePayments(){
                 let payment = SKPayment(product: product)
@@ -134,7 +132,6 @@ extension BuyTokenViewController {
                 return
             }
             
-            print("Price of product", TokenManager.shared.priceOf(product: product))
             
             if SKPaymentQueue.canMakePayments(){
                 let payment = SKPayment(product: product)
@@ -176,12 +173,10 @@ extension BuyTokenViewController: SKPaymentTransactionObserver{
             switch transaction.transactionState{
             case .purchased:
                 complete(transaction: transaction)
-                print("purchased in queue")
                 break
                 
             case .failed:
                 complete(transaction: transaction)
-                print("failed in queue")
                 break
                 
             case .purchasing: break
@@ -299,7 +294,7 @@ extension BuyTokenViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print(indexPath.row)
+
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

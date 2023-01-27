@@ -147,7 +147,6 @@ class TokenManager: NSObject {
         FirebaseService.shared.updateDocument(.token, query: ["userId" : userId], data: ["amount" : newUserTokenAmount]) { [weak self] error in
             
             guard error == nil, let tk = self?.userToken else {
-                print("error updating token")
                 completion(.failure(error!))
                 return
             }

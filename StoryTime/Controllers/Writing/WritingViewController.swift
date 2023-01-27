@@ -214,12 +214,12 @@ extension WritingViewController {
     
     
     @objc func speak(){
-        print("speak")
+        
     }
     
     
     @objc func options(){
-        print("options")
+        
     }
 }
 
@@ -259,7 +259,9 @@ extension WritingViewController: NetworkServiceDelegate  {
                 }
                 break
             case .failure(_):
-                print("Error updating token")
+                DispatchQueue.main.async { [weak self] in
+                    self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+                }
                 break
             }
         }

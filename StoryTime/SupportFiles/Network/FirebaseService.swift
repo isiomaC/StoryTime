@@ -87,8 +87,6 @@ class FirebaseService {
             return
         }
         
-        print(user.uid)
-        
         // Query and delete User.guid == user.uid from Firestore
         getDocuments(.user, query: ["guid": user.uid]){ [weak self] documentSnapShot, error in
             guard let snapShot = documentSnapShot, error == nil else {
@@ -258,7 +256,9 @@ class FirebaseService {
                     
                     if let snapShot = querySnapShot {
                         if snapShot.documents.count > 0  {
-                            completion( snapShot.documents, nil)
+                            completion(snapShot.documents, nil)
+                        }else{
+                            completion([], nil)
                         }
                     }
                 }

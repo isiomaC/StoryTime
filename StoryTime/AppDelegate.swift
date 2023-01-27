@@ -10,6 +10,7 @@ import FirebaseCore
 import IQKeyboardManagerSwift
 import FirebaseRemoteConfig
 import FirebaseMessaging
+import GoogleSignIn
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,12 +19,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
         FirebaseApp.configure()
+        
+        if let clientId = FirebaseApp.app()?.options.clientID{
+            let config = GIDConfiguration(clientID: clientId)
+            
+            GIDSignIn.sharedInstance.configuration = config
+            
+//            if GIDSignIn.sharedInstance.hasPreviousSignIn() {
+//                GIDSignIn.sharedInstance.restorePreviousSignIn()
+//            }
+        }
+        
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.previousNextDisplayMode = .alwaysShow
         getRemoteConfigData()
         startWindow()
         return true
+    }
+    
+    @available(iOS 9.0, *)
+    func application(_ application: UIApplication, open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any])
+      -> Bool {
+      return GIDSignIn.sharedInstance.handle(url)
     }
     
     private func startWindow(){

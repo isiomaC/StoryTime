@@ -17,6 +17,7 @@
 		131295FD297F7AAB00E903B1 /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 131295FC297F7AAB00E903B1 /* FirebasePerformance */; };
 		131295FF297F7AAB00E903B1 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 131295FE297F7AAB00E903B1 /* FirebaseRemoteConfig */; };
 		13129601297F7AAB00E903B1 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 13129600297F7AAB00E903B1 /* FirebaseStorage */; };
+		13129604298260FF00E903B1 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 13129603298260FF00E903B1 /* GoogleSignInSwift */; };
 		131F07D12960EDEE00C93390 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131F07D02960EDEE00C93390 /* Token.swift */; };
 		131F07D32960EE6400C93390 /* TokenDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131F07D22960EE6400C93390 /* TokenDTO.swift */; };
 		133ABEA5292E8249000A2D96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEA4292E8249000A2D96 /* AppDelegate.swift */; };
@@ -178,6 +179,7 @@
 				131295FB297F7AAB00E903B1 /* FirebaseMessaging in Frameworks */,
 				13B04F172933B5A1007E7637 /* SwiftyJSON in Frameworks */,
 				131295FD297F7AAB00E903B1 /* FirebasePerformance in Frameworks */,
+				13129604298260FF00E903B1 /* GoogleSignInSwift in Frameworks */,
 				131295F9297F7AAB00E903B1 /* FirebaseFunctions in Frameworks */,
 				13B04EE5293198B0007E7637 /* IQKeyboardManagerSwift in Frameworks */,
 				131295F5297F7AAB00E903B1 /* FirebaseCrashlytics in Frameworks */,
@@ -492,6 +494,7 @@
 				131295FC297F7AAB00E903B1 /* FirebasePerformance */,
 				131295FE297F7AAB00E903B1 /* FirebaseRemoteConfig */,
 				13129600297F7AAB00E903B1 /* FirebaseStorage */,
+				13129603298260FF00E903B1 /* GoogleSignInSwift */,
 			);
 			productName = StoryTime;
 			productReference = 133ABEA1292E8249000A2D96 /* StoryTime.app */;
@@ -569,6 +572,7 @@
 				13B04EE3293198B0007E7637 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				13B04F152933B5A0007E7637 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				131295EF297F7AAB00E903B1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				13129602298260FF00E903B1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 133ABEA2292E8249000A2D96 /* Products */;
 			projectDirPath = "";
@@ -849,7 +853,6 @@
 				DEVELOPMENT_TEAM = F7QY8Q547Z;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StoryTime/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = AiBuddy;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -881,7 +884,6 @@
 				DEVELOPMENT_TEAM = F7QY8Q547Z;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StoryTime/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = AiBuddy;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1029,6 +1031,14 @@
 				kind = branch;
 			};
 		};
+		13129602298260FF00E903B1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		13B04EE3293198B0007E7637 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
@@ -1092,6 +1102,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 131295EF297F7AAB00E903B1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		13129603298260FF00E903B1 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 13129602298260FF00E903B1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 		13B04EE4293198B0007E7637 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -119,7 +119,6 @@ extension HomeViewModel: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
         if let myItems = items.value{
             openStory(myItems[indexPath.row])
         }

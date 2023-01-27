@@ -119,15 +119,8 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         
         //settings
         if indexPath.section == 0 {
-
-//            let option = settingsOptions[indexPath.row]
-//
-//            switch option.name {
-//            case SettingsConstants.tokens:
-//                    print("tokens")
-//                    break
-//            default : break;
-//            }
+            
+            present(BuyTokenViewController(), animated: true)
             
         }else if indexPath.section == 1 {
             
@@ -226,7 +219,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             
             if option.name == SettingsConstants.deleteAccount {
               
-                let credentialPopUp = UIAlertController(title: "Are you sure ?", message: "This cannot be undone", preferredStyle: .alert)
+                let credentialPopUp = UIAlertController(title: "Are you sure you want to delete", message: "This action cannot be undone. All prompts, and saved notes will be permanently deleted.", preferredStyle: .alert)
                 
                 let yesAction = UIAlertAction(title: "Yes", style: .destructive){ action in
                     

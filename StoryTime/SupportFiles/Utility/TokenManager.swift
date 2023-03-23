@@ -40,8 +40,7 @@ class TokenManager: NSObject {
         BuyTokenInfo( description:"Choose a token plan", image: UIImage(systemName: "checkmark.circle")!),
         BuyTokenInfo( description: "Save countless prompt output", image:UIImage(systemName: "checkmark.circle")!),
         BuyTokenInfo( description: "Limitless prompts", image: UIImage(systemName: "checkmark.circle")!),
-        BuyTokenInfo( description: "Mobile AI assitant", image: UIImage(systemName: "checkmark.circle")!),
-        BuyTokenInfo( description: "Unlimited Clips for iMessage Extension", image: UIImage(systemName: "checkmark.circle")!),
+        BuyTokenInfo( description: "Mobile AI assitant", image: UIImage(systemName: "checkmark.circle")!)
     ]
     
     private static var instance : TokenManager!

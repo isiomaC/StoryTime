@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1304547D29CC374E00D5E977 /* myIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1304547C29CC374E00D5E977 /* myIcon.png */; };
 		131295EE2976202700E903B1 /* SettingsOptsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131295ED2976202700E903B1 /* SettingsOptsDTO.swift */; };
 		131295F1297F7AAB00E903B1 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 131295F0297F7AAB00E903B1 /* FirebaseAnalytics */; };
 		131295F3297F7AAB00E903B1 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 131295F2297F7AAB00E903B1 /* FirebaseAuth */; };
@@ -18,6 +19,7 @@
 		131295FF297F7AAB00E903B1 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 131295FE297F7AAB00E903B1 /* FirebaseRemoteConfig */; };
 		13129601297F7AAB00E903B1 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 13129600297F7AAB00E903B1 /* FirebaseStorage */; };
 		13129604298260FF00E903B1 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 13129603298260FF00E903B1 /* GoogleSignInSwift */; };
+		131B8BF129A49B01007D205C /* EmptyableDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131B8BF029A49B01007D205C /* EmptyableDiffableDataSource.swift */; };
 		131F07D12960EDEE00C93390 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131F07D02960EDEE00C93390 /* Token.swift */; };
 		131F07D32960EE6400C93390 /* TokenDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131F07D22960EE6400C93390 /* TokenDTO.swift */; };
 		133ABEA5292E8249000A2D96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133ABEA4292E8249000A2D96 /* AppDelegate.swift */; };
@@ -69,7 +71,7 @@
 		13B04EEF2932F885007E7637 /* WritingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EEE2932F885007E7637 /* WritingViewModel.swift */; };
 		13B04EF12933013C007E7637 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EF02933013C007E7637 /* BaseViewController.swift */; };
 		13B04EF329330450007E7637 /* MyNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EF229330450007E7637 /* MyNavigationController.swift */; };
-		13B04EF529330C5C007E7637 /* myIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B04EF429330C5C007E7637 /* myIcon.png */; };
+		13B04EF529330C5C007E7637 /* myIcon_old.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B04EF429330C5C007E7637 /* myIcon_old.png */; };
 		13B04EF729330DDC007E7637 /* usecaseicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 13B04EF629330DDC007E7637 /* usecaseicon.png */; };
 		13B04EFB29334513007E7637 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EFA29334513007E7637 /* LoginViewController.swift */; };
 		13B04EFD29334523007E7637 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B04EFC29334523007E7637 /* SignUpViewController.swift */; };
@@ -102,7 +104,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1304547C29CC374E00D5E977 /* myIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myIcon.png; sourceTree = "<group>"; };
 		131295ED2976202700E903B1 /* SettingsOptsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOptsDTO.swift; sourceTree = "<group>"; };
+		131B8BF029A49B01007D205C /* EmptyableDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyableDiffableDataSource.swift; sourceTree = "<group>"; };
 		131F07D02960EDEE00C93390 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		131F07D22960EE6400C93390 /* TokenDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDTO.swift; sourceTree = "<group>"; };
 		133ABEA1292E8249000A2D96 /* StoryTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,7 +161,7 @@
 		13B04EEE2932F885007E7637 /* WritingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingViewModel.swift; sourceTree = "<group>"; };
 		13B04EF02933013C007E7637 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		13B04EF229330450007E7637 /* MyNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNavigationController.swift; sourceTree = "<group>"; };
-		13B04EF429330C5C007E7637 /* myIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myIcon.png; sourceTree = "<group>"; };
+		13B04EF429330C5C007E7637 /* myIcon_old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myIcon_old.png; sourceTree = "<group>"; };
 		13B04EF629330DDC007E7637 /* usecaseicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usecaseicon.png; sourceTree = "<group>"; };
 		13B04EFA29334513007E7637 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		13B04EFC29334523007E7637 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -294,6 +298,7 @@
 				133ABF2E2930BB73000A2D96 /* GradientButton.swift */,
 				13B04F132933B11E007E7637 /* Utils.swift */,
 				138DBC362956E1AA007D2030 /* TokenManager.swift */,
+				131B8BF029A49B01007D205C /* EmptyableDiffableDataSource.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -404,7 +409,8 @@
 			children = (
 				13B04EF629330DDC007E7637 /* usecaseicon.png */,
 				133B6C2E29694EBB008E70EE /* check.png */,
-				13B04EF429330C5C007E7637 /* myIcon.png */,
+				1304547C29CC374E00D5E977 /* myIcon.png */,
+				13B04EF429330C5C007E7637 /* myIcon_old.png */,
 				133ABF2C2930AA1B000A2D96 /* undraw.png */,
 				133ABEAD292E8259000A2D96 /* Assets.xcassets */,
 			);
@@ -593,8 +599,9 @@
 				133ABED5292E926F000A2D96 /* GoogleService-Info.plist in Resources */,
 				133ABEB1292E8259000A2D96 /* LaunchScreen.storyboard in Resources */,
 				13B04EF729330DDC007E7637 /* usecaseicon.png in Resources */,
-				13B04EF529330C5C007E7637 /* myIcon.png in Resources */,
+				13B04EF529330C5C007E7637 /* myIcon_old.png in Resources */,
 				13B04F122933B0B4007E7637 /* Config.plist in Resources */,
+				1304547D29CC374E00D5E977 /* myIcon.png in Resources */,
 				133ABEAE292E8259000A2D96 /* Assets.xcassets in Resources */,
 				133B6C2F29694EBB008E70EE /* check.png in Resources */,
 				133ABF2D2930AA1B000A2D96 /* undraw.png in Resources */,
@@ -672,6 +679,7 @@
 				13B04F01293345B8007E7637 /* SignUpView.swift in Sources */,
 				13B04EFF29334595007E7637 /* LoginView.swift in Sources */,
 				133B6C2D29694A72008E70EE /* BuyTokenView.swift in Sources */,
+				131B8BF129A49B01007D205C /* EmptyableDiffableDataSource.swift in Sources */,
 				13B04EEB2932EEEA007E7637 /* WritingViewController.swift in Sources */,
 				133ABF3129315F8F000A2D96 /* CollectionViewModel.swift in Sources */,
 			);
@@ -862,7 +870,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chuck.StoryTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -893,7 +901,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chuck.StoryTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

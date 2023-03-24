@@ -16,7 +16,7 @@ class WritingViewController: BaseViewController{
     
     var userToken = TokenManager.shared.userToken
     
-    init(promptDto: PromptDTO){
+    init(promptDto: PromptChatDTO){
         
         super.init(nibName: nil, bundle: nil)
         
@@ -170,7 +170,7 @@ extension WritingViewController {
                         return
                     }
                     
-                    let updPrompt = Prompt(id: prompt.id!, prompt: newPromptText, userId: userId, output: ouput)
+                    let updPrompt = PromptV2(id: prompt.id!, prompt: newPromptText, userId: userId, output: ouput)
                     
                     if let promptToUpdate = updPrompt.removeKey() {
                         snapShot.reference.updateData(promptToUpdate)
@@ -226,6 +226,43 @@ extension WritingViewController {
 
 extension WritingViewController: NetworkServiceDelegate  {
     func success(_ network: NetworkService, output: PromptOutputDTO) {
+//        guard var firstChoice = output.choices.first,
+//              let token = viewModel.userToken.value else {
+//            return
+//        }
+//
+//        var myOutput = output
+//
+//        firstChoice.text = firstChoice.text.trim()
+//
+//        newPrompt?.outputText = firstChoice.text
+//
+//        myOutput.choices = [firstChoice]
+//        newPrompt?.promptOutput = myOutput
+//
+//        TokenManager.shared.updateTokenUsage(usageTotal: output.usage.total_tokens, token: token) { [weak self] result in
+//            switch result{
+//            case .success(let tk):
+//
+//                self?.viewModel.userToken.value = tk
+//
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.homeView.inputField.text = ""
+//                    let mCoordinator = (self?.coordinator as? MainCoordinator)
+//                    mCoordinator?.navigationController?.stopActivityIndicator()
+//                    mCoordinator?.push(WritingViewController(promptDto: (self?.newPrompt)!))
+//                }
+//                break
+//            case .failure(_):
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+//                }
+//                break
+//            }
+//        }
+    }
+    
+    func success(_ network: NetworkService, output: PromptOutputChatGptDTO) {
         
         guard let token = userToken else {
             return
@@ -245,16 +282,16 @@ extension WritingViewController: NetworkServiceDelegate  {
                     
                     var myOutput = output
                     
-                    firstChoice.text = firstChoice.text.trim()
+                    firstChoice.message.content = firstChoice.message.content.trim()
                     
                     myOutput.choices = [firstChoice]
                     
                     // Update TextView to display output
-                    self?.viewModel.outputText.value = firstChoice.text
+                    self?.viewModel.outputText.value = firstChoice.message.content
                     
                     //Capture output incase it changes
                     self?.viewModel.currentPrompt?.promptOutput = myOutput
-                    self?.viewModel.currentPrompt?.outputText = firstChoice.text
+                    self?.viewModel.currentPrompt?.outputText = firstChoice.message.content
 
                 }
                 break

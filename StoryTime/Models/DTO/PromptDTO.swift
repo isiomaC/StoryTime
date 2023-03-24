@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: For displaying data on UI
+// MARK: For displaying data on UI (davinci-003)
 struct PromptDTO: Hashable, Codable, Equatable {
     
     var id: String?
@@ -42,6 +42,39 @@ struct PromptDTO: Hashable, Codable, Equatable {
 //    }
     
     static func == (lhs: PromptDTO, rhs: PromptDTO) -> Bool {
+        lhs.id == rhs.id && lhs.promptOutput == rhs.promptOutput && lhs.prompt == rhs.prompt
+    }
+}
+
+//MARK: For displaying data on UI (chatGpt)
+struct PromptChatDTO: Hashable, Codable, Equatable {
+    
+    var id: String?
+    var prompt: String?
+    var outputText: String?
+    var promptOutput: PromptOutputChatGptDTO?
+    
+    init(prompt: PromptV2){
+        self.id = prompt.id
+        self.prompt = prompt.prompt
+        self.outputText = prompt.output.choices.first?.message.content
+        self.promptOutput = prompt.output
+    }
+    
+    init(id: String?, prompt: String, promptOutput: PromptOutputChatGptDTO?) {
+        self.id = id
+        self.prompt = prompt
+        self.outputText = promptOutput?.choices.first?.message.content
+        self.promptOutput = promptOutput
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(prompt)
+        hasher.combine(outputText)
+    }
+    
+    static func == (lhs: PromptChatDTO, rhs: PromptChatDTO) -> Bool {
         lhs.id == rhs.id && lhs.promptOutput == rhs.promptOutput && lhs.prompt == rhs.prompt
     }
 }
@@ -83,6 +116,37 @@ struct Choice: Codable, Equatable {
     static func == (lhs: Choice, rhs: Choice) -> Bool {
         lhs.text == rhs.text
     }
+}
+
+
+//MARK: Output from chatGpt prompt posted to backend server
+struct PromptOutputChatGptDTO: Codable, Equatable {
+    
+     var id: String      //'cmpl-6H4IkrqIxsf5ON0f66eWFCdSh5eKO',
+     var object: String  //'text_completion',
+     var created: Int    // 1669526130,
+     var model: String
+     var choices: [ChoiceChatGpt]
+     var usage: Usage
+     
+     static func == (lhs: PromptOutputChatGptDTO, rhs: PromptOutputChatGptDTO) -> Bool {
+         lhs.id == rhs.id && lhs.choices == rhs.choices
+     }
+}
+
+struct ChoiceChatGpt: Codable, Equatable {
+    var message: ChatGptMessage
+    var index: Int
+    var finish_reason: String
+    
+    static func == (lhs: ChoiceChatGpt, rhs: ChoiceChatGpt) -> Bool {
+        lhs.message == rhs.message
+    }
+}
+
+struct ChatGptMessage: Codable, Equatable {
+    var role: String
+    var content: String
 }
 
 struct Usage: Codable {

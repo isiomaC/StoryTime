@@ -10,7 +10,7 @@ import UIKit
 
 class HomeCell: UICollectionViewCell, Providable {
     
-    typealias ProvidedItem = PromptDTO
+    typealias ProvidedItem = PromptChatDTO
     
 //    lazy var imageView = ViewGenerator.getImageView(ImageViewOptions(image: nil, size: (100, 100)))
 
@@ -34,7 +34,7 @@ class HomeCell: UICollectionViewCell, Providable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func provide(_ promptDto: PromptDTO) {
+    public func provide(_ promptDto: PromptChatDTO) {
         title.text = "''"+promptDto.prompt!+"''"
         subTitle.text = promptDto.outputText
         

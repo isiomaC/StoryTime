@@ -10,6 +10,7 @@ import SwiftyJSON
 
 protocol NetworkServiceDelegate{
     func success(_ network: NetworkService, output: PromptOutputDTO)
+    func success(_ network: NetworkService, output: PromptOutputChatGptDTO)
     func failure(error : Error?)
 }
 
@@ -33,6 +34,43 @@ struct NetworkService {
 
     private var SHARED_SECRET = Utils.readFromPList("Config", key: "SHARED_SECRET")
     
+    func postPromptChatGpt(_ content: String, role: String = "assistant"){
+        let endpoint = "\(APIURL)/\(VERSION)/promptChatGpt"
+        
+        if Reachability.isConnectedToNetwork(){
+            guard let url = URL(string: endpoint) else { return }
+            
+            let body = [
+                "role": role,
+                "content": content
+            ]
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+            
+            guard let httpBody = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+                return
+            }
+            request.httpBody = httpBody
+            
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: request) { (data, response, error) in
+                if let err = error{
+                    self.delegate?.failure(error: err)
+                }
+                
+                if let responseData = data{
+                    if let prediction = self.parseJSONChatGpt(data: responseData){
+                        self.delegate?.success(self, output: prediction)
+                    }
+                }
+            }
+            task.resume()
+        }else{
+            delegate?.failure(error: NSError(domain: "No Internet Connection", code: 12000, userInfo: [:]))
+        }
+    }
     
     func postPrompt(_ prompt: String){
         
@@ -72,7 +110,6 @@ struct NetworkService {
         }else{
             delegate?.failure(error: NSError(domain: "No Internet Connection", code: 12000, userInfo: [:]))
         }
-   
     }
     
     
@@ -82,6 +119,18 @@ struct NetworkService {
         do{
             
             let decoded = try decoder.decode(PromptOutputDTO.self, from: data)
+            return decoded
+        }catch{
+            delegate?.failure(error: error)
+            return nil
+        }
+    }
+    
+    private func parseJSONChatGpt(data: Data) -> PromptOutputChatGptDTO? {
+        let decoder = JSONDecoder()
+        do{
+            
+            let decoded = try decoder.decode(PromptOutputChatGptDTO.self, from: data)
             return decoded
         }catch{
             delegate?.failure(error: error)

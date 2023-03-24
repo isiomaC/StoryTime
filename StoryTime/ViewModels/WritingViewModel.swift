@@ -16,40 +16,23 @@ class WritingViewModel {
     
     var outputText: ObservableObject<String> = ObservableObject(nil)
     
-    var currentPrompt: PromptDTO?
+//    var currentPrompt: PromptDTO?
+    var currentPrompt: PromptChatDTO?
     
     init(){ }
     
     func triggerPrompt(_ text: String){
-        NetworkService.shared.postPrompt(text)
+        NetworkService.shared.postPromptChatGpt(text)
     }
     
-//    func updatePromptOuput(_ uid: String, prompt: PromptDTO, completion: @escaping(Error?) -> Void){
-//        guard let promptId = prompt.id else {
-//            return
-//        }
-//        
-//        let promptToUpdate : [String: Any] = [
-//            "prompt": prompt.prompt as Any,
-//            "output": prompt.promptOutput as Any
-//        ]
-//
-//        FirebaseService.shared.updateDocumentById(.promptOuput, id: promptId, data: promptToUpdate) { error in
-//            guard error == nil else {
-//                completion(error)
-//                return
-//            }
-//            completion(nil)
-//        }
-//    }
     
-    func savePromptOutput(_ uid: String, prompt: PromptDTO?, completion: @escaping(Error?) -> Void){
+    func savePromptOutput(_ uid: String, prompt: PromptChatDTO?, completion: @escaping(Error?) -> Void){
         
         guard let myPrompt = prompt, let promptText = myPrompt.prompt, let promptOuput = myPrompt.promptOutput else {
             return
         }
         
-        let newPrompt = Prompt(id: "", prompt: promptText, userId: uid, output: promptOuput)
+        let newPrompt = PromptV2(id: "", prompt: promptText, userId: uid, output: promptOuput)
         
         guard let promptToSave = newPrompt.removeKey() else {
             return
@@ -64,5 +47,28 @@ class WritingViewModel {
             completion(nil)
         }
     }
+    
+    
+//    func savePromptOutput(_ uid: String, prompt: PromptDTO?, completion: @escaping(Error?) -> Void){
+//
+//        guard let myPrompt = prompt, let promptText = myPrompt.prompt, let promptOuput = myPrompt.promptOutput else {
+//            return
+//        }
+//
+//        let newPrompt = Prompt(id: "", prompt: promptText, userId: uid, output: promptOuput)
+//
+//        guard let promptToSave = newPrompt.removeKey() else {
+//            return
+//        }
+//
+//        FirebaseService.shared.saveDocument(.promptOuput, data: promptToSave){ ref, error in
+//            guard error == nil else {
+//                completion(error)
+//                return
+//            }
+//
+//            completion(nil)
+//        }
+//    }
     
 }

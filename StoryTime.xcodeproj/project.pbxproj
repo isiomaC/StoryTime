@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1304547D29CC374E00D5E977 /* myIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1304547C29CC374E00D5E977 /* myIcon.png */; };
+		1304547F29CDC79100D5E977 /* PromptV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1304547E29CDC79100D5E977 /* PromptV2.swift */; };
 		131295EE2976202700E903B1 /* SettingsOptsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131295ED2976202700E903B1 /* SettingsOptsDTO.swift */; };
 		131295F1297F7AAB00E903B1 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 131295F0297F7AAB00E903B1 /* FirebaseAnalytics */; };
 		131295F3297F7AAB00E903B1 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 131295F2297F7AAB00E903B1 /* FirebaseAuth */; };
@@ -105,6 +106,7 @@
 
 /* Begin PBXFileReference section */
 		1304547C29CC374E00D5E977 /* myIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myIcon.png; sourceTree = "<group>"; };
+		1304547E29CDC79100D5E977 /* PromptV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptV2.swift; sourceTree = "<group>"; };
 		131295ED2976202700E903B1 /* SettingsOptsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOptsDTO.swift; sourceTree = "<group>"; };
 		131B8BF029A49B01007D205C /* EmptyableDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyableDiffableDataSource.swift; sourceTree = "<group>"; };
 		131F07D02960EDEE00C93390 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				133ABF03292F8B90000A2D96 /* Home.swift */,
 				13B04F0F2933AE8A007E7637 /* Prompt.swift */,
 				131F07D02960EDEE00C93390 /* Token.swift */,
+				1304547E29CDC79100D5E977 /* PromptV2.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -657,6 +660,7 @@
 				131F07D12960EDEE00C93390 /* Token.swift in Sources */,
 				133ABF252930A088000A2D96 /* ViewOptions.swift in Sources */,
 				133ABF0F292F8EBE000A2D96 /* MainCoordinator.swift in Sources */,
+				1304547F29CDC79100D5E977 /* PromptV2.swift in Sources */,
 				133ABEFD292F8A03000A2D96 /* FirebaseService.swift in Sources */,
 				13B04EFB29334513007E7637 /* LoginViewController.swift in Sources */,
 				13B04F0C2933ACB6007E7637 /* NetworkService.swift in Sources */,

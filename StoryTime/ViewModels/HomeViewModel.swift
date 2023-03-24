@@ -28,7 +28,7 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
     }
     
     func triggerPrompt(_ text: String){
-        NetworkService.shared.postPrompt(text)
+        NetworkService.shared.postPromptChatGpt(text)
     }
     
     func fetchToken(completion: @escaping(TokenDTO?, Error?) -> Void){
@@ -37,7 +37,7 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
         }
     }
     
-    func fetchPrompts(completion: @escaping([Prompt]?, Error?) -> Void) {
+    func fetchPrompts(completion: @escaping([PromptV2]?, Error?) -> Void) {
 
         FirebaseService.shared.getPaginatedDocuments(.promptOuput, query: [ "userId": userId ], last: lastDocument) { [weak self] documentSnapShot, error in
             guard let snapShot = documentSnapShot, error == nil else {
@@ -45,10 +45,10 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
                 return
             }
             
-            var prompts:[Prompt] = []
+            var prompts:[PromptV2] = []
             
             for shot in snapShot{
-                if let existingPrompt = Prompt(snapShot: shot) {
+                if let existingPrompt = PromptV2(snapShot: shot) {
                     prompts.append(existingPrompt)
                 }
             }
@@ -59,7 +59,7 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
         }
     }
     
-    func fetchPaginatedPrompts(completion: @escaping([Prompt]?, Error?) -> Void){
+    func fetchPaginatedPrompts(completion: @escaping([PromptV2]?, Error?) -> Void){
        
         FirebaseService.shared.getPaginatedDocuments(.promptOuput, query: [ "userId": userId ], last: lastDocument) { [weak self] documentsSnapShot, error in
             guard let snapShot = documentsSnapShot, error == nil else {
@@ -67,10 +67,10 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
                 return
             }
             
-            var prompts : [Prompt] = []
+            var prompts : [PromptV2] = []
             
             for shot in snapShot{
-                if let existingPrompt = Prompt(snapShot: shot) {
+                if let existingPrompt = PromptV2(snapShot: shot) {
                     prompts.append(existingPrompt)
                 }
             }
@@ -81,7 +81,7 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
         }
     }
     
-    func deletePrompt(_ prompt: PromptDTO){
+    func deletePrompt(_ prompt: PromptChatDTO){
         guard let id = prompt.id else { return }
         
         remove([prompt])
@@ -105,7 +105,7 @@ class HomeViewModel: CollectionViewModel<HomeCell>{
 
 extension HomeViewModel: UICollectionViewDelegate {
     
-    private func openStory(_ item: PromptDTO?){
+    private func openStory(_ item: PromptChatDTO?){
         
         guard let myItem = item else {
             return

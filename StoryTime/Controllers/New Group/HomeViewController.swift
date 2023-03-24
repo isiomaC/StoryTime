@@ -16,7 +16,8 @@ class HomeViewController: BaseViewController {
     
     var homeView = HomeView()
     
-    var newPrompt: PromptDTO?
+//    var newPrompt: PromptDTO?
+    var newPrompt: PromptChatDTO?
     
     override func viewDidLoad() {
         
@@ -187,7 +188,7 @@ extension HomeViewController{
 
                 viewModel.userToken.value = userToken
 
-                newPrompt = PromptDTO(id: nil, prompt: newPromptText, promptOutput: nil)
+                newPrompt = PromptChatDTO(id: nil, prompt: newPromptText, promptOutput: nil)
 
                 if let new = newPrompt, let promptText = new.prompt{
                     let mCoordinator = (coordinator as? MainCoordinator)
@@ -215,6 +216,43 @@ extension HomeViewController{
 //MARK: NetworkServiceDelegate
 extension HomeViewController: NetworkServiceDelegate {
     func success(_ network: NetworkService, output: PromptOutputDTO) {
+//        guard var firstChoice = output.choices.first,
+//              let token = viewModel.userToken.value else {
+//            return
+//        }
+//
+//        var myOutput = output
+//
+//        firstChoice.text = firstChoice.text.trim()
+//
+//        newPrompt?.outputText = firstChoice.text
+//
+//        myOutput.choices = [firstChoice]
+//        newPrompt?.promptOutput = myOutput
+//
+//        TokenManager.shared.updateTokenUsage(usageTotal: output.usage.total_tokens, token: token) { [weak self] result in
+//            switch result{
+//            case .success(let tk):
+//
+//                self?.viewModel.userToken.value = tk
+//
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.homeView.inputField.text = ""
+//                    let mCoordinator = (self?.coordinator as? MainCoordinator)
+//                    mCoordinator?.navigationController?.stopActivityIndicator()
+//                    mCoordinator?.push(WritingViewController(promptDto: (self?.newPrompt)!))
+//                }
+//                break
+//            case .failure(_):
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.showAlert(.error, (title: "Error", message: "Something went wrong"))
+//                }
+//                break
+//            }
+//        }
+    }
+    
+    func success(_ network: NetworkService, output: PromptOutputChatGptDTO) {
         
         guard var firstChoice = output.choices.first,
               let token = viewModel.userToken.value else {
@@ -223,9 +261,9 @@ extension HomeViewController: NetworkServiceDelegate {
         
         var myOutput = output
         
-        firstChoice.text = firstChoice.text.trim()
+        firstChoice.message.content = firstChoice.message.content.trim()
         
-        newPrompt?.outputText = firstChoice.text
+        newPrompt?.outputText = firstChoice.message.content
         
         myOutput.choices = [firstChoice]
         newPrompt?.promptOutput = myOutput

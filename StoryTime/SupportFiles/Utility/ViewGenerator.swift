@@ -229,7 +229,7 @@ class ViewGenerator {
     static func getTextView(_ props: TextViewOptions) -> UITextView {
         let textView = UITextView(frame: CGRect(x: 0, y: 0, width: Dimensions.SCREENSIZE.width, height: Dimensions.SCREENSIZE.height * 0.2))
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.textContainer.maximumNumberOfLines = 20
+//        textView.textContainer.maximumNumberOfLines = 20    --Affects scrolling when set
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.textColor = props.textColor
         textView.font = props.fontStyle
@@ -237,4 +237,14 @@ class ViewGenerator {
         textView.text = props.placeholder
         return textView
     }
+    
+    static func getFlexibleTextView(_ props: TextViewOptions) -> FlexibleTextView{
+        let flexibleTextView = FlexibleTextView(frame: CGRect(x: 0, y: 0, width: Dimensions.SCREENSIZE.width, height: Dimensions.SCREENSIZE.height * 0.2))
+        flexibleTextView.textColor = props.textColor
+        flexibleTextView.font = props.fontStyle
+        flexibleTextView.textAlignment = .natural
+        flexibleTextView.text = props.placeholder
+        return flexibleTextView
+    }
+    
 }

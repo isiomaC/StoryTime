@@ -35,7 +35,7 @@ class WritingView: BaseView {
         
         MyColors.setGradientBackground(view: promptBtn, top: MyColors.topGradient, bottom: MyColors.bottomGradient)
         
-        MyColors.setGradientBackground(view: outputField, top: MyColors.topGradient, bottom: .white)
+        outputField.backgroundColor = MyColors.topGradient
         
         outputField.layer.cornerRadius = 20
         notificationView.roundCorners(corners: [.bottomLeft, .bottomRight], radius: 20)

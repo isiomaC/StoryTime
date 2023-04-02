@@ -163,16 +163,17 @@ extension UITextField {
 
 //MARK: UITextView
 extension UITextView{
+    
+    func scrollToBottom() {
+        let textCount: Int = text.count
+        guard textCount >= 1 else { return }
+        scrollRangeToVisible(NSRange(location: textCount - 1, length: 1))
+    }
+    
     func setTyping(text: String, characterDelay: TimeInterval = 3.0) {
         
         //Clean up - it exist already
         self.text = ""
-//        if let currentAttributeText = self.attributedText as? NSMutableAttributedString {
-//            currentAttributeText.removeAttribute(NSAttributedString.Key.underlineStyle, range: (text as NSString).range(of: prompt))
-//            currentAttributeText.removeAttribute(NSAttributedString.Key.font, range: NSMakeRange(0, currentAttributeText.length))
-//
-//            self.attributedText = currentAttributeText
-//        }
         
         let writingTask = DispatchWorkItem { [weak self] in
             text.forEach { char in
@@ -183,8 +184,7 @@ extension UITextView{
             }
             
             DispatchQueue.main.async {
-//                self?.text = ""
-//                self?.attributedText = Utils.attributedText(text, targetString: prompt, font: AppFonts.body)
+                self?.scrollToBottom()
             }
         }
         

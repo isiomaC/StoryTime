@@ -63,6 +63,7 @@
 		133B6C2B29694A63008E70EE /* BuyTokenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133B6C2A29694A63008E70EE /* BuyTokenViewController.swift */; };
 		133B6C2D29694A72008E70EE /* BuyTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133B6C2C29694A72008E70EE /* BuyTokenView.swift */; };
 		133B6C2F29694EBB008E70EE /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = 133B6C2E29694EBB008E70EE /* check.png */; };
+		1358F46229D8F142007B8CAE /* FlexibleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1358F46129D8F142007B8CAE /* FlexibleTextView.swift */; };
 		138DBC372956E1AA007D2030 /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138DBC362956E1AA007D2030 /* TokenManager.swift */; };
 		138DC8A0293A3C8F002522B4 /* PromptDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138DC89F293A3C8F002522B4 /* PromptDTO.swift */; };
 		13B04EE5293198B0007E7637 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 13B04EE4293198B0007E7637 /* IQKeyboardManagerSwift */; };
@@ -155,6 +156,7 @@
 		133B6C2A29694A63008E70EE /* BuyTokenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTokenViewController.swift; sourceTree = "<group>"; };
 		133B6C2C29694A72008E70EE /* BuyTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTokenView.swift; sourceTree = "<group>"; };
 		133B6C2E29694EBB008E70EE /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
+		1358F46129D8F142007B8CAE /* FlexibleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleTextView.swift; sourceTree = "<group>"; };
 		138DBC362956E1AA007D2030 /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		138DC89F293A3C8F002522B4 /* PromptDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptDTO.swift; sourceTree = "<group>"; };
 		13B04EE82932EED8007E7637 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 				13B04F132933B11E007E7637 /* Utils.swift */,
 				138DBC362956E1AA007D2030 /* TokenManager.swift */,
 				131B8BF029A49B01007D205C /* EmptyableDiffableDataSource.swift */,
+				1358F46129D8F142007B8CAE /* FlexibleTextView.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -671,6 +674,7 @@
 				133ABF1F29309E87000A2D96 /* OnBoardView.swift in Sources */,
 				133ABF11292F940C000A2D96 /* Font.swift in Sources */,
 				133ABF2F2930BB74000A2D96 /* GradientButton.swift in Sources */,
+				1358F46229D8F142007B8CAE /* FlexibleTextView.swift in Sources */,
 				138DC8A0293A3C8F002522B4 /* PromptDTO.swift in Sources */,
 				133B6C2B29694A63008E70EE /* BuyTokenViewController.swift in Sources */,
 				133ABEEE292F5298000A2D96 /* Extensions.swift in Sources */,
@@ -874,7 +878,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chuck.StoryTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -905,7 +909,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chuck.StoryTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

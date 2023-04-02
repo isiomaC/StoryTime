@@ -39,6 +39,7 @@ class WritingViewController: BaseViewController{
         
         setUpActions()
         
+        writingView.outputField.isScrollEnabled = false
         setUpBinders()
     }
     
@@ -46,6 +47,21 @@ class WritingViewController: BaseViewController{
         super.viewWillAppear(animated)
         
         NetworkService.shared.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        writingView.outputField.isScrollEnabled = true
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+  
+//        let size = CGSize (width: writingView.outputField.frame.size.width, height: .infinity)
+//
+//        let estimatedSize = writingView.outputField.sizeThatFits(size)
+//        writingView.outputField.isScrollEnabled = true
+//        writingView.outputField.contentSize = estimatedSize
     }
 
     
@@ -94,7 +110,8 @@ class WritingViewController: BaseViewController{
             }
             
             DispatchQueue.main.async{
-                strongSelf.writingView.outputField.setTyping(text: out)
+                strongSelf.writingView.outputField.setTyping(text: out, characterDelay: 1.5)
+//                strongSelf.writingView.outputField.text = out
                 strongSelf.writingView.setWordCount(out.split(separator: " ").count)
             }
         }
@@ -315,6 +332,8 @@ extension WritingViewController: UITextViewDelegate, UITextFieldDelegate  {
     func textViewDidChange(_ textView: UITextView) {
         let wordCount = textView.text.split(separator: " ").count
         writingView.setWordCount(wordCount)
+        
+        
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -322,6 +341,19 @@ extension WritingViewController: UITextViewDelegate, UITextFieldDelegate  {
         writingView.setWordCount(wordCount)
         
         viewModel.currentPrompt?.outputText = textView.text
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        textView.resignFirstResponder()
+        
+//        let size = CGSize (width: textView.frame.size.width, height: .infinity)
+//
+//        let estimatedSize = textView.sizeThatFits(size)
+//        textView.isScrollEnabled = true
+//        textView.contentSize = estimatedSize
+        
+        print(textView.contentSize.height)
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
